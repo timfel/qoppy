@@ -1,46 +1,72 @@
+class Runtime(object):
+    def __init__(self, primitives):
+        self.global_env = W_List(W_List(symbol("vau"), W_Vau(self.vau)), w_nil)
+        self.global_env.comma(W_List(W_List(symbol("quote"), W_Vau(self.quote)), w_nil))
+        primitives["eval"] = self.m_eval
+        primitives["operate"] = self.operate
+        primitives["lookup"] = self.lookup
+        for name in primitives:
+            prim = W_Primitive(primitives[name])
+            self.global_env.comma(W_List(W_List(symbol(name), prim), w_nil))
 
-def bind(param, val):
-    if param is w_nil and val is w_nil:
-        return w_nil
-    elif isinstance(param, W_Symbol):
-        if param.name == "_":
+    def bind(self, param, val):
+        if param is w_nil and val is w_nil:
             return w_nil
+        elif isinstance(param, W_Symbol):
+            if param.name == "_":
+                return w_nil
+            else:
+                return W_List(W_List(param, val), w_nil)
+        elif isinstance(param, W_List) and isinstance(val, W_List):
+            if param is w_nil:
+                raise QuoppaException("too many arguments")
+            elif val is w_nil:
+                raise QuoppaException("too few arguments")
+            return W_List(
+                self.bind(param.car, val.car).comma(self.bind(param.cdr, val.cdr)),
+                w_nil
+            )
         else:
-            return W_List(W_List(param, val), w_nil)
-    elif isinstance(param, W_List) and isinstance(val, W_List):
-        return W_List(bind(param.car, val.car).comma(bind(param.cdr, val.cdr)), w_nil)
-    else:
-        raise QuoppaException("can't bind %s %s" % (param, val))
+            raise QuoppaException("can't bind %s %s" % (param, val))
 
-def lookup(name, env):
-    pair = env.car
-    env = env.cdr
-    while pair is not w_nil:
-        if pair.car.equal(name):
-            return pair
+    def lookup(self, name, env):
         pair = env.car
         env = env.cdr
-    raise QuoppaException("could not find %s" % name)
+        while pair is not w_nil:
+            if pair.car.equal(name):
+                return pair
+            if env is w_nil:
+                break
+            pair = env.car
+            env = env.cdr
+        raise QuoppaException("could not find %s" % name)
 
-def m_eval(env, exp):
-    if isinstance(exp, W_Symbol):
-        return lookup(exp, env).cdr
-    elif exp is w_nil:
-        return w_nil
-    elif isinstance(exp, W_List):
-        return operate(env, m_eval(env, exp.car), exp.cdr)
-    else:
-        return exp
+    def m_eval(self, env, exp):
+        if env is w_nil:
+            env = self.global_env
+        if isinstance(exp, W_Symbol):
+            return self.lookup(exp, env).cdr
+        elif exp is w_nil:
+            return w_nil
+        elif isinstance(exp, W_List):
+            return self.operate(env, self.m_eval(env, exp.car), exp.cdr)
+        else:
+            return exp
 
-def operate(env, fexpr, operands):
-    import pdb; pdb.set_trace()
-    return fexpr.call(env, operands)
+    def operate(self, env, fexpr, operands):
+        return fexpr.call(self, env, operands)
 
-def vau(static_env, vau_operands):
-    params = vau_operands.car
-    env_param = vau_operands.cdr.car
-    body = vau_operands.cdr.cdr.car
-    return W_Fexpr(env_param, params, static_env, body)
+    def vau(self, static_env, vau_operands):
+        params = vau_operands.car
+        env_param = vau_operands.cdr.car
+        body = vau_operands.cdr.cdr.car
+        return W_Fexpr(env_param, params, static_env, body)
+
+    def quote(self, env, w_obj):
+        if isinstance(w_obj, W_List):
+            return w_obj.car
+        else:
+            return w_obj
 
 
 ### Runtime Classes
@@ -68,7 +94,7 @@ class W_Object(object):
     eqv = eq
     equal = eqv
 
-    def call(self, env, operative):
+    def call(self, runtime, env, operative):
         raise QuoppaException("cannot call %s" % self.to_string())
 
 class W_Undefined(W_Object):
@@ -254,10 +280,10 @@ class W_List(W_Object):
     def to_lstring(self):
         car = self.car.to_string()
         cdr = self.cdr
-        if isinstance(cdr, W_List): #still proper list
-            return car + " " + cdr.to_lstring()
-        elif cdr is w_nil: #end of proper list
+        if cdr is w_nil:
             return car
+        elif isinstance(cdr, W_List): #still proper list
+            return car + " " + cdr.to_lstring()
         else: #end proper list with dotted
             return car + " . " + cdr.to_string()
 
@@ -281,6 +307,12 @@ class W_List(W_Object):
         return isinstance(w_obj, W_List) and \
             self.car.equal(w_obj.car) and \
             self.cdr.equal(w_obj.cdr)
+
+    def cons(self, w_pair):
+        if self.cdr is w_nil:
+            return W_List(self.car, w_pair)
+        else:
+            return W_List(self.car, self.cdr.cons(w_pair))
 
     def comma(self, w_pair):
         if self.cdr is w_nil:
@@ -311,6 +343,8 @@ class W_Nil(W_List):
     def comma(self, w_pair):
         return w_pair
 
+    cons = comma
+
 w_nil = W_Nil()
 
 class W_Fexpr(W_Object):
@@ -325,11 +359,11 @@ class W_Fexpr(W_Object):
 
     to_repr = to_string
 
-    def call(self, dynamic_env, operands):
-        local_names = self.env_param.comma(self.params)
+    def call(self, runtime, dynamic_env, operands):
+        local_names = W_List(self.env_param, self.params)
         local_values = dynamic_env.comma(operands)
-        local_env = bind(local_names, local_values).comma(self.static_env)
-        return m_eval(local_env, body)
+        local_env = runtime.bind(local_names, local_values).comma(self.static_env)
+        return runtime.m_eval(local_env, body)
 
 class W_Primitive(W_Fexpr):
     def __init__(self, fun):
@@ -340,13 +374,13 @@ class W_Primitive(W_Fexpr):
 
     to_repr = to_string
 
-    def call(self, env, operands):
+    def call(self, runtime, env, operands):
         operands_w = []
         while operands is not w_nil:
-            operands_w.append(m_eval(env, operands.car))
+            operands_w.append(runtime.m_eval(env, operands.car))
             operands = operands.cdr
         return self.fun(*operands_w)
 
 class W_Vau(W_Primitive):
-    def call(self, env, operands):
-        return fun(env, operands)
+    def call(self, runtime, env, operands):
+        return self.fun(env, operands)
