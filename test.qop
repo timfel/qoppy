@@ -1,9 +1,9 @@
 (vau (x) env (+ x 1))
-;; ((vau (x) env (+ x 1)) 10)
-;; (eval nil
-;;       (bool (= (eval nil #t) #t)
-;;       	    '(display ".")
-;;       	    '(error "eval is broken")))
+((vau (x) env (+ x 1)) 10)
+(eval nil
+      (bool (= (eval nil #t) #t)
+      	    '(display ".")
+      	    '(error "eval is broken")))
 (eval nil '(display "."))
 (operate nil eval '(nil #t))
 (bool (* 1 2) 1 2)

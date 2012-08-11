@@ -22,10 +22,7 @@ class Runtime(object):
                 raise QuoppaException("too many arguments")
             elif val is w_nil:
                 raise QuoppaException("too few arguments")
-            return W_List(
-                self.bind(param.car, val.car).comma(self.bind(param.cdr, val.cdr)),
-                w_nil
-            )
+            return self.bind(param.car, val.car).comma(self.bind(param.cdr, val.cdr))
         else:
             raise QuoppaException("can't bind %s %s" % (param, val))
 
@@ -361,9 +358,9 @@ class W_Fexpr(W_Object):
 
     def call(self, runtime, dynamic_env, operands):
         local_names = W_List(self.env_param, self.params)
-        local_values = dynamic_env.comma(operands)
+        local_values = W_List(dynamic_env, w_nil).comma(operands)
         local_env = runtime.bind(local_names, local_values).comma(self.static_env)
-        return runtime.m_eval(local_env, body)
+        return runtime.m_eval(local_env, self.body)
 
 class W_Primitive(W_Fexpr):
     def __init__(self, fun):

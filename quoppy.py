@@ -47,7 +47,6 @@ def entry_point(argv):
         assert isinstance(t, list)
         for sexpr in t:
             w_retval = runtime.m_eval(w_nil, sexpr)
-            print w_retval.to_string()
         return 0
     else:
         print "Usage: %s [quoppa source file]" % argv[0]
