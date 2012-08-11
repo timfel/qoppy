@@ -1,7 +1,7 @@
 class Runtime(object):
     def __init__(self, primitives):
         self.global_env = W_List(W_List(symbol("vau"), W_Vau(self.vau)), w_nil)
-        self.global_env.comma(W_List(W_List(symbol("quote"), W_Vau(self.quote)), w_nil))
+        # self.global_env.comma(W_List(W_List(symbol("quote"), W_Vau(self.quote)), w_nil))
         primitives["eval"] = self.m_eval
         primitives["operate"] = self.operate
         primitives["lookup"] = self.lookup
