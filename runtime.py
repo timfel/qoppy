@@ -1,7 +1,6 @@
 class Runtime(object):
     def __init__(self, primitives):
         self.global_env = W_List(W_List(symbol("vau"), W_Vau(self.vau)), w_nil)
-        # self.global_env.comma(W_List(W_List(symbol("quote"), W_Vau(self.quote)), w_nil))
         primitives["eval"] = self.m_eval
         primitives["operate"] = self.operate
         primitives["lookup"] = self.lookup
@@ -58,12 +57,6 @@ class Runtime(object):
         env_param = vau_operands.cdr.car
         body = vau_operands.cdr.cdr.car
         return W_Fexpr(env_param, params, static_env, body)
-
-    def quote(self, env, w_obj):
-        if isinstance(w_obj, W_List):
-            return w_obj.car
-        else:
-            return w_obj
 
 
 ### Runtime Classes
