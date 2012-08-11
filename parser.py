@@ -15,8 +15,10 @@ def str_unquote(s):
             ch = s[pos]
             if ch == '\\' or ch == '\"':
                 str_lst.append(ch)
+            elif ch == 'n':
+                str_lst.append("\n")
             else:
-                raise QuoppaException
+                raise QuoppaException(ch)
         else:
             str_lst.append(ch)
 
@@ -32,7 +34,7 @@ class QuoppaParser(PackratParser):
         return {w_nil};
 
     STRING:
-        c = `\"([^\\\"]|\\\"|\\\\)*\"`
+        c = `\"([^\\\"]|\\\"|\\\\|\\n)*\"`
         IGNORE*
         return {W_String(str_unquote(c))};
 
