@@ -20,8 +20,8 @@ def symbol_p(o):
 def pair_p(o):
     return W_Boolean(isinstance(o, W_List))
 
-def cons(w_pair, w_other):
-    return w_pair.cons(w_other)
+def cons(w_car, w_cdr):
+    return W_List(w_car, w_cdr)
 
 def car(w_pair):
     return w_pair.car
