@@ -1,3 +1,5 @@
+from execution_model import (W_List, symbol, w_nil, W_Symbol, QuoppaException,
+                             W_Vau, W_Primitive, W_Fexpr)
 
 class Runtime(object):
     def __init__(self, primitives):

@@ -1,8 +1,8 @@
 from pypy.rlib.parsing.pypackrat import PackratParser
 from pypy.rlib.parsing.makepackrat import BacktrackException, Status
 
-from runtime import (W_List, W_Integer, W_Real, W_String, w_nil,
-                     symbol, W_Boolean, QuoppaException)
+from execution_model import (W_List, W_Integer, W_Real, W_String, w_nil,
+                             symbol, W_Boolean, QuoppaException)
 
 def str_unquote(s):
     str_lst = []

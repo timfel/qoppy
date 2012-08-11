@@ -1,6 +1,6 @@
 import os
 
-from runtime import w_nil, W_Real, W_Boolean, W_Symbol, W_List, QuoppaException
+from execution_model import w_nil, W_Real, W_Boolean, W_Symbol, W_List, QuoppaException
 
 def m_bool(b, t, f):
     if b.to_boolean():
