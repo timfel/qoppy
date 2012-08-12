@@ -1,3 +1,5 @@
+from pypy.rlib.objectmodel import specialize
+
 class QuoppaException(Exception):
     pass
 
@@ -199,6 +201,8 @@ class W_Integer(W_Real):
 
 class W_List(W_Object):
     def __init__(self, car, cdr):
+        assert isinstance(car, W_Object)
+        assert isinstance(cdr, W_Object)
         self.car = car
         self.cdr = cdr
 
@@ -294,6 +298,7 @@ class W_Fexpr(W_Object):
         return runtime.m_eval(local_env, self.body)
 
 class W_Primitive(W_Fexpr):
+    @specialize.memo()
     def __init__(self, fun):
         code = fun.__code__
 

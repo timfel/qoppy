@@ -1,9 +1,13 @@
+from pypy.rlib.objectmodel import specialize
+
 from execution_model import (W_List, symbol, w_nil, W_Symbol, QuoppaException,
                              W_Vau, W_Primitive, W_Fexpr)
 
 class Runtime(object):
+    @specialize.memo()
     def __init__(self, primitives):
-        self.global_env = W_List(W_List(symbol("vau"), W_Vau(self.vau)), w_nil)
+        vau = W_Vau(self.vau)
+        self.global_env = W_List(W_List(symbol("vau"), vau), w_nil)
         primitives["eval"] = self.m_eval
         primitives["operate"] = self.operate
         primitives["lookup"] = self.lookup
@@ -45,6 +49,7 @@ class Runtime(object):
 
     def m_eval(self, env, exp):
         if env is w_nil:
+            assert isinstance(self.global_env, W_List)
             env = self.global_env
         if isinstance(exp, W_Symbol):
             return self.lookup(exp, env).cdr
@@ -59,7 +64,15 @@ class Runtime(object):
         return fexpr.call(self, env, operands)
 
     def vau(self, static_env, vau_operands):
+        assert isinstance(vau_operands, W_List)
         params = vau_operands.car
-        env_param = vau_operands.cdr.car
-        body = vau_operands.cdr.cdr.car
+
+        env_cdr = vau_operands.cdr
+        assert isinstance(env_cdr, W_List)
+        env_param = env_cdr.car
+
+        body_cdr = env_cdr.cdr
+        assert isinstance(body_cdr, W_List)
+        body = body_cdr.car
+
         return W_Fexpr(env_param, params, static_env, body)

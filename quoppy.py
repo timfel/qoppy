@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 import sys
 
+from pypy.rlib.objectmodel import specialize
 from pypy.rlib.streamio import open_file_as_stream
 from pypy.rlib.parsing.makepackrat import BacktrackException
 
 from parser import parse
-from runtime import Runtime, w_nil
+from runtime import Runtime
+from execution_model import w_nil
 
+@specialize.memo()
 def get_runtime():
     from primitives import (m_bool, eq_p, null_p, symbol_p, pair_p, cons,
                             car, cdr, set_car_b, set_cdr_b, plus, times, minus,

@@ -24,12 +24,15 @@ def cons(w_car, w_cdr):
     return W_List(w_car, w_cdr)
 
 def car(w_pair):
+    assert isinstance(w_pair, W_List)
     return w_pair.car
 
 def cdr(w_pair):
+    assert isinstance(w_pair, W_List)
     return w_pair.cdr
 
 def set_car_b(w_pair, w_val):
+    assert isinstance(w_pair, W_List)
     car = w_pair.car
     cdr = w_pair.cdr
     w_pair.car = w_val
@@ -37,6 +40,7 @@ def set_car_b(w_pair, w_val):
     return w_pair
 
 def set_cdr_b(w_pair, w_val):
+    assert isinstance(w_pair, W_List)
     w_pair.cdr = w_val
     return w_pair
 
@@ -76,9 +80,11 @@ def eq(a, b):
     else:
         return W_Boolean(a.equal(b))
 
-def error(msg = None):
-    if msg is None:
+def error(w_msg = None):
+    if w_msg is None:
         msg = ""
+    else:
+        msg = w_msg.to_string()
     raise QuoppaException(msg)
 
 def display(w_str):
