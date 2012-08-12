@@ -29,6 +29,7 @@ class Runtime(object):
             raise QuoppaException("can't bind %s %s" % (param, val))
 
     def lookup(self, name, env):
+        assert isinstance(env, W_List)
         pair = env.car
         env = env.cdr
         while pair is not w_nil:
@@ -37,6 +38,7 @@ class Runtime(object):
                 return pair
             if env is w_nil:
                 break
+            assert isinstance(env, W_List)
             pair = env.car
             env = env.cdr
         raise QuoppaException("could not find %s" % name)
