@@ -295,7 +295,27 @@ class W_Fexpr(W_Object):
 
 class W_Primitive(W_Fexpr):
     def __init__(self, fun):
-        self.fun = fun
+        code = fun.__code__
+
+        lines = []
+        lines.append("def %s(args_w):" % fun.__name__)
+        lines.append("    args = ()")
+
+        arg_count = 0
+        for i, argname in enumerate(code.co_varnames[:code.co_argcount]):
+            if argname != "self":
+                coerce_code = "args_w[{:d}]".format(arg_count)
+                lines.append("    if len(args_w) > {}:".format(arg_count))
+                lines.append("        args += ({},)".format(coerce_code))
+                lines.append("    else:")
+                lines.append("        raise Exception({}, '{}')".format(i, argname))
+                arg_count += 1
+        lines.append("    return func(*args)")
+
+        source = "\n".join(lines)
+        namespace = {"func": fun}
+        exec source in namespace
+        self.fun = namespace[fun.__name__]
 
     def to_string(self):
         return "#<a primitive>"
@@ -305,10 +325,11 @@ class W_Primitive(W_Fexpr):
     def call(self, runtime, env, operands):
         operands_w = []
         while operands is not w_nil:
+            assert isinstance(operands, W_List)
             operands_w.append(runtime.m_eval(env, operands.car))
             operands = operands.cdr
-        return self.fun(*operands_w)
+        return self.fun(operands_w)
 
 class W_Vau(W_Primitive):
     def call(self, runtime, env, operands):
-        return self.fun(env, operands)
+        return self.fun([env, operands])

@@ -32,6 +32,7 @@ class Runtime(object):
         pair = env.car
         env = env.cdr
         while pair is not w_nil:
+            assert isinstance(pair, W_List)
             if pair.car.equal(name):
                 return pair
             if env is w_nil:
