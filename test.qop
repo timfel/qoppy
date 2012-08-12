@@ -138,4 +138,5 @@
         operative
         (map (lambda (x) (list quote x)) args))))))
 
-(display (fib 4))
+(display (fib 12))
+(display "\n")
