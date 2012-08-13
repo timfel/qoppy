@@ -252,6 +252,12 @@ class W_List(W_Object):
             self.cdr.comma(w_pair)
             return self
 
+def w_list(first, *args):
+    w_l = W_List(first, w_nil)
+    for w_item in args:
+        w_l.comma(W_List(w_item, w_nil))
+    return w_l
+
 class W_Nil(W_List):
     _w_nil = None
     def __new__(cls):
@@ -291,8 +297,8 @@ class W_Fexpr(W_Object):
 
     def call(self, runtime, dynamic_env, operands):
         local_names = W_List(self.env_param, self.params)
-        local_values = W_List(dynamic_env, w_nil).comma(operands)
-        local_env = runtime.bind(local_names, local_values).comma(self.static_env)
+        local_values = W_List(dynamic_env, operands)
+        local_env = W_List(runtime.bind(local_names, local_values), self.static_env)
         return runtime.m_eval(local_env, self.body)
 
 class W_Primitive(W_Fexpr):

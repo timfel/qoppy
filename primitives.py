@@ -38,10 +38,7 @@ def cdr(w_pair):
 
 def set_car_b(w_pair, w_val):
     if isinstance(w_pair, W_List) and w_pair is not w_nil:
-        car = w_pair.car
-        cdr = w_pair.cdr
         w_pair.car = w_val
-        w_pair.cdr = W_List(car, cdr)
         return w_pair
     else:
         raise QuoppaException("wrong type argument %s for set-car!" % w_pair)
