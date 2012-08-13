@@ -201,8 +201,6 @@ class W_Integer(W_Real):
 
 class W_List(W_Object):
     def __init__(self, car, cdr):
-        assert isinstance(car, W_Object)
-        assert isinstance(cdr, W_Object)
         self.car = car
         self.cdr = cdr
 

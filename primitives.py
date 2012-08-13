@@ -24,25 +24,34 @@ def cons(w_car, w_cdr):
     return W_List(w_car, w_cdr)
 
 def car(w_pair):
-    assert isinstance(w_pair, W_List)
-    return w_pair.car
+    if isinstance(w_pair, W_List) and w_pair is not w_nil:
+        return w_pair.car
+    else:
+        import pdb; pdb.set_trace()
+        raise QuoppaException("wrong type argument %s for car" % w_pair)
 
 def cdr(w_pair):
-    assert isinstance(w_pair, W_List)
-    return w_pair.cdr
+    if isinstance(w_pair, W_List) and w_pair is not w_nil:
+        return w_pair.car
+    else:
+        raise QuoppaException("wrong type argument %s for cdr" % w_pair)
 
 def set_car_b(w_pair, w_val):
-    assert isinstance(w_pair, W_List)
-    car = w_pair.car
-    cdr = w_pair.cdr
-    w_pair.car = w_val
-    w_pair.cdr = W_List(car, cdr)
-    return w_pair
+    if isinstance(w_pair, W_List) and w_pair is not w_nil:
+        car = w_pair.car
+        cdr = w_pair.cdr
+        w_pair.car = w_val
+        w_pair.cdr = W_List(car, cdr)
+        return w_pair
+    else:
+        raise QuoppaException("wrong type argument %s for set-car!" % w_pair)
 
 def set_cdr_b(w_pair, w_val):
-    assert isinstance(w_pair, W_List)
-    w_pair.cdr = w_val
-    return w_pair
+    if isinstance(w_pair, W_List) and w_pair is not w_nil:
+        w_pair.cdr = w_val
+        return w_pair
+    else:
+        raise QuoppaException("wrong type argument %s for set-cdr!" % w_pair)
 
 def plus(a, b):
     if isinstance(a, W_Real) and isinstance(b, W_Real):

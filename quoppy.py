@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import sys
+import sys, traceback, os
 
 from pypy.rlib.objectmodel import specialize
 from pypy.rlib.streamio import open_file_as_stream
@@ -7,7 +7,7 @@ from pypy.rlib.parsing.makepackrat import BacktrackException
 
 from parser import parse
 from runtime import Runtime
-from execution_model import w_nil
+from execution_model import w_nil, QuoppaException
 
 @specialize.memo()
 def get_runtime():
@@ -46,10 +46,14 @@ def entry_point(argv):
             print "parse error in line %d, column %d" % (line, col)
             return 1
 
-        #this should not be necessary here
-        assert isinstance(t, list)
         for sexpr in t:
-            w_retval = runtime.m_eval(w_nil, sexpr)
+            try:
+                runtime.m_eval(w_nil, sexpr)
+            except QuoppaException as e:
+                os.write(1, str(e))
+                # import pdb; pdb.set_trace()
+                # traceback.print_tb(sys.exc_info()[2])
+                return 1
         return 0
     else:
         print "Usage: %s [quoppa source file]" % argv[0]

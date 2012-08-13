@@ -33,23 +33,25 @@ class Runtime(object):
             raise QuoppaException("can't bind %s %s" % (param, val))
 
     def lookup(self, name, env):
-        assert isinstance(env, W_List)
+        if env is w_nil or not isinstance(env, W_List):
+            raise QuoppaException("cannot lookup in %s" % env)
         pair = env.car
         env = env.cdr
         while pair is not w_nil:
-            assert isinstance(pair, W_List)
+            if not isinstance(pair, W_List):
+                raise QuoppaException("Consistency error! Non pair %s in env" % pair)
             if pair.car.equal(name):
                 return pair
             if env is w_nil:
                 break
-            assert isinstance(env, W_List)
+            if env is w_nil or not isinstance(env, W_List):
+                raise QuoppaException("Consistency error! Non list %s as env cdr" % env)
             pair = env.car
             env = env.cdr
         raise QuoppaException("could not find %s" % name)
 
     def m_eval(self, env, exp):
         if env is w_nil:
-            assert isinstance(self.global_env, W_List)
             env = self.global_env
         if isinstance(exp, W_Symbol):
             return self.lookup(exp, env).cdr
