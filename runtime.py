@@ -50,6 +50,7 @@ class Runtime(object):
             env = env.cdr
             if not isinstance(env, W_List):
                     raise QuoppaException("Consistency error! Non cons %s as env cdr" % env)
+        raise QuoppaException("canno find %s in env" % name)
 
     def m_eval(self, env, exp):
         if env is w_nil:
