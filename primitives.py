@@ -27,57 +27,57 @@ def car(w_pair):
     if isinstance(w_pair, W_List) and w_pair is not w_nil:
         return w_pair.car
     else:
-        raise QuoppaException("wrong type argument %s for car" % w_pair)
+        raise QuoppaException("wrong type argument %s for car" % w_pair.to_string())
 
 def cdr(w_pair):
     if isinstance(w_pair, W_List) and w_pair is not w_nil:
         return w_pair.cdr
     else:
-        raise QuoppaException("wrong type argument %s for cdr" % w_pair)
+        raise QuoppaException("wrong type argument %s for cdr" % w_pair.to_string())
 
 def set_car_b(w_pair, w_val):
     if isinstance(w_pair, W_List) and w_pair is not w_nil:
         w_pair.car = w_val
         return w_pair
     else:
-        raise QuoppaException("wrong type argument %s for set-car!" % w_pair)
+        raise QuoppaException("wrong type argument %s for set-car!" % w_pair.to_string())
 
 def set_cdr_b(w_pair, w_val):
     if isinstance(w_pair, W_List) and w_pair is not w_nil:
         w_pair.cdr = w_val
         return w_pair
     else:
-        raise QuoppaException("wrong type argument %s for set-cdr!" % w_pair)
+        raise QuoppaException("wrong type argument %s for set-cdr!" % w_pair.to_string())
 
 def plus(a, b):
     if isinstance(a, W_Real) and isinstance(b, W_Real):
         return W_Real(a.to_number() + b.to_number())
     else:
-        raise QuoppaException("cannot %s + %s" % (a, b))
+        raise QuoppaException("cannot %s + %s" % (a.to_string(), b.to_string()))
 
 def times(a, b):
     if isinstance(a, W_Real) and isinstance(b, W_Real):
         return W_Real(a.to_number() * b.to_number())
     else:
-        raise QuoppaException("cannot %s * %s" % (a, b))
+        raise QuoppaException("cannot %s * %s" % (a.to_string(), b.to_string()))
 
 def minus(a, b):
     if isinstance(a, W_Real) and isinstance(b, W_Real):
         return W_Real(a.to_number() - b.to_number())
     else:
-        raise QuoppaException("cannot %s - %s" % (a, b))
+        raise QuoppaException("cannot %s - %s" % (a.to_string(), b.to_string()))
 
 def div(a, b):
     if isinstance(a, W_Real) and isinstance(b, W_Real):
         return W_Real(a.to_number() / b.to_number())
     else:
-        raise QuoppaException("cannot %s / %s" % (a, b))
+        raise QuoppaException("cannot %s / %s" % (a.to_string(), b.to_string()))
 
 def less_or_eq(a, b):
     if isinstance(a, W_Real) and isinstance(b, W_Real):
         return W_Boolean(a.to_number() <= b.to_number())
     else:
-        raise QuoppaException("cannot %s <= %s" % (a, b))
+        raise QuoppaException("cannot %s <= %s" % (a.to_string(), b.to_string()))
 
 def eq(a, b):
     if isinstance(a, W_Real) and isinstance(b, W_Real):

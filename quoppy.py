@@ -50,7 +50,8 @@ def entry_point(argv):
             try:
                 runtime.m_eval(w_nil, sexpr)
             except QuoppaException as e:
-                os.write(1, str(e))
+                os.write(1, "%s\n" % str(e))
+                os.write(1, "%s\n" % str(e.msg))
                 # import pdb; pdb.set_trace()
                 # traceback.print_tb(sys.exc_info()[2])
                 return 1

@@ -31,26 +31,26 @@ class Runtime(object):
         elif isinstance(param, W_List) and isinstance(val, W_List):
             return self.bind(param.car, val.car).comma(self.bind(param.cdr, val.cdr))
         else:
-            raise QuoppaException("can't bind %s %s" % (param, val))
+            raise QuoppaException("can't bind %s %s" % (param.to_string(), val.to_string()))
 
     def lookup(self, name, env):
         if env is w_nil or not isinstance(env, W_List):
-            raise QuoppaException("cannot find %s in %s" % (name, env))
+            raise QuoppaException("cannot find %s in %s" % (name.to_string(), env.to_string()))
         while env is not w_nil:
             frame = env.car
             while frame is not w_nil:
                 if not isinstance(frame, W_List):
-                    raise QuoppaException("Consistency error! Non cons %s as frame cdr" % frame)
+                    raise QuoppaException("Consistency error! Non cons %s as frame cdr" % frame.to_string())
                 pair = frame.car
                 if not isinstance(pair, W_List):
-                    raise QuoppaException("Consistency error! Non pair %s in frame" % pair)
+                    raise QuoppaException("Consistency error! Non pair %s in frame" % pair.to_string())
                 if pair.car.equal(name):
                     return pair
                 frame = frame.cdr
             env = env.cdr
             if not isinstance(env, W_List):
-                    raise QuoppaException("Consistency error! Non cons %s as env cdr" % env)
-        raise QuoppaException("canno find %s in env" % name)
+                    raise QuoppaException("Consistency error! Non cons %s as env cdr" % env.to_string())
+        raise QuoppaException("canno find %s in env" % name.to_string())
 
     def m_eval(self, env, exp):
         if env is w_nil:

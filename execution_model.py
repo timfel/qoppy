@@ -1,7 +1,10 @@
 from pypy.rlib.objectmodel import specialize
 
 class QuoppaException(Exception):
-    pass
+    def __init__(self, msg=None):
+        if not msg:
+            msg = ""
+        self.msg = msg
 
 class W_Object(object):
     __slots__ = []
