@@ -31,7 +31,7 @@ def car(w_pair):
 
 def cdr(w_pair):
     if isinstance(w_pair, W_List) and w_pair is not w_nil:
-        return w_pair.car
+        return w_pair.cdr
     else:
         raise QuoppaException("wrong type argument %s for cdr" % w_pair)
 
