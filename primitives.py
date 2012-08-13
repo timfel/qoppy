@@ -1,6 +1,7 @@
 import os
 
-from execution_model import w_nil, W_Real, W_Boolean, W_Symbol, W_List, QuoppaException
+from execution_model import (w_nil, w_true, w_false, W_Real,
+                             W_Symbol, W_List, QuoppaException)
 
 def m_bool(b, t, f):
     if b.to_boolean():
@@ -9,16 +10,28 @@ def m_bool(b, t, f):
         return f
 
 def eq_p(a, b):
-    return W_Boolean(a.equal(b))
+    if a.equal(b):
+        return w_true
+    else:
+        return w_false
 
-def null_p(o):
-    return W_Boolean(o is w_nil)
+def null_p(w_obj):
+    if w_obj is w_nil:
+        return w_true
+    else:
+        return w_false
 
-def symbol_p(o):
-    return W_Boolean(isinstance(o, W_Symbol))
+def symbol_p(w_obj):
+    if isinstance(w_obj, W_Symbol):
+        return w_true
+    else:
+        return w_false
 
-def pair_p(o):
-    return W_Boolean(isinstance(o, W_List))
+def pair_p(w_obj):
+    if isinstance(w_obj, W_List):
+        return w_true
+    else:
+        return w_false
 
 def cons(w_car, w_cdr):
     return W_List(w_car, w_cdr)
@@ -75,15 +88,22 @@ def div(a, b):
 
 def less_or_eq(a, b):
     if isinstance(a, W_Real) and isinstance(b, W_Real):
-        return W_Boolean(a.to_number() <= b.to_number())
+        if a.to_number() <= b.to_number():
+            return w_true
+        else:
+            return w_false
     else:
         raise QuoppaException("cannot %s <= %s" % (a.to_string(), b.to_string()))
 
 def eq(a, b):
     if isinstance(a, W_Real) and isinstance(b, W_Real):
-        return W_Boolean(a.to_number() == b.to_number())
+        test = a.to_number() == b.to_number()
     else:
-        return W_Boolean(a.equal(b))
+        test = a.equal(b)
+    if test:
+        return w_true
+    else:
+        return w_false
 
 def error(w_msg = None):
     if w_msg is None:

@@ -2,7 +2,7 @@ from pypy.rlib.parsing.pypackrat import PackratParser
 from pypy.rlib.parsing.makepackrat import BacktrackException, Status
 
 from execution_model import (W_List, W_Integer, W_Real, W_String, w_nil,
-                             symbol, W_Boolean, QuoppaException)
+                             symbol, w_true, w_false, QuoppaException)
 
 def str_unquote(s):
     str_lst = []
@@ -61,7 +61,7 @@ class QuoppaParser(PackratParser):
     BOOLEAN:
         c = `#(t|f)`
         IGNORE*
-        return {W_Boolean(c[1] == 't')};
+        return {w_true if (c[1] == 't') else w_false};
 
     IGNORE:
         ` |\n|\t|;[^\n]*`;

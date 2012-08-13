@@ -38,42 +38,14 @@ class W_Undefined(W_Object):
 
 w_undefined = W_Undefined()
 
-class W_Boolean(W_Object):
-    def __new__(cls, val):
-        if val:
-            return w_true
-        else:
-            return w_false
-
-    def __init__(self, val):
-        pass
-
-class W_True(W_Boolean):
-    _w_true = None
-    def __new__(cls, val):
-        if cls._w_true is None:
-            cls._w_true = W_Object.__new__(cls)
-        return cls._w_true
-
-    def __init__(self, val):
-        assert val
-
+class W_True(W_Object):
     def to_repr(self):
         return "#t"
     to_string = to_repr
 
-w_true = W_True(True)
+w_true = W_True()
 
-class W_False(W_Boolean):
-    _w_false = None
-    def __new__(cls, val):
-        if cls._w_false is None:
-            cls._w_false = W_Object.__new__(cls)
-        return cls._w_false
-
-    def __init__(self, val):
-        assert not val
-
+class W_False(W_Object):
     def to_repr(self):
         return "#f"
     to_string = to_repr
@@ -81,7 +53,7 @@ class W_False(W_Boolean):
     def to_boolean(self):
         return False
 
-w_false = W_False(False)
+w_false = W_False()
 
 class W_String(W_Object):
     def __init__(self, val):
