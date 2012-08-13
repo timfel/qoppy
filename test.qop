@@ -55,85 +55,88 @@
             (eval env (list base-lambda param (cons begin body)))))
     lambda))
 
-;; (set! define
-;;     ((lambda (base-define)
-;;         (vau (param . body) env
-;;             (if (pair? param)
-;;                 (eval env
-;;                     (list base-define (car param)
-;;                         (cons lambda (cons (cdr param) body))))
-;;                 (eval env (cons base-define (cons param body))))))
-;;     define))
+(set! define
+    ((lambda (base-define)
+        (vau (param . body) env
+            (if (pair? param)
+                (eval env
+                    (list base-define (car param)
+                        (cons lambda (cons (cdr param) body))))
+                (eval env (cons base-define (cons param body))))))
+    define))
 
-;; (define (compose f g)
-;;     (lambda (x) (f (g x))))
+(define (compose f g)
+    (lambda (x) (f (g x))))
 
-;; (define caar  (compose car  car))
-;; (define cadr  (compose car  cdr))
-;; (define caddr (compose cadr cdr))
+(define caar  (compose car  car))
+(define cadr  (compose car  cdr))
+(define caddr (compose cadr cdr))
 
-;; (define (fib n)
-;;     (display n)
-;;     (display "\n")
-;;     (if (<= n 1)
-;;         n
-;;         (+ (fib (- n 1)) (fib (- n 2)))))
+(define (fib n)
+    (display n)
+    (display "\n")
+    (if (<= n 1)
+        n
+        (+ (fib (- n 1)) (fib (- n 2)))))
 
-;; (define (map f xs)
-;;     (if (null? xs)
-;;         '()
-;;         (cons (f (car xs)) (map f (cdr xs)))))
+(define (map f xs)
+    (if (null? xs)
+        '()
+        (cons (f (car xs)) (map f (cdr xs)))))
 
-;; (define let (vau (binds . body) env
-;;     (eval env
-;;         (cons
-;;             (cons lambda (cons (map car binds) body))
-;;             (map cadr binds)))))
+(define let (vau (binds . body) env
+    (eval env
+        (cons
+            (cons lambda (cons (map car binds) body))
+            (map cadr binds)))))
 
-;; (define (to-bool x)
-;;     (if x #t #f))
+(define (to-bool x)
+    (if x #t #f))
 
-;; (define (not x)
-;;     (if x #f #t))
+(define (not x)
+    (if x #f #t))
 
-;; (define (and-or ident) (vau args env
-;;     (if (null? args)
-;;         ident
-;;         (if (eq? ident (to-bool (eval env (car args))))
-;;             (eval env (cons (list and-or ident) (cdr args)))
-;;             (not ident)))))
+(define (and-or ident) (vau args env
+    (if (null? args)
+        ident
+        (if (eq? ident (to-bool (eval env (car args))))
+            (eval env (cons (list and-or ident) (cdr args)))
+            (not ident)))))
 
-;; (define or  (and-or #f))
-;; (define and (and-or #t))
+(define or  (and-or #f))
+(define and (and-or #t))
 
-;; (define cond (vau alts env
-;;     (if (null? alts)
-;;         #f
-;;         (let (( ((test body) . rest) alts ))
-;;             (if (or (eq?  test 'else)
-;;                     (eval env test))
-;;                 (eval env body)
-;;                 (eval env (cons cond rest)))))))
+(define cond (vau alts env
+    (if (null? alts)
+        #f
+        (let (( ((test body) . rest) alts ))
+            (if (or (eq?  test 'else)
+                    (eval env test))
+                (eval env body)
+                (eval env (cons cond rest)))))))
 
-;; (define (assq key alist) (cond
-;;     ((null? alist)
-;;         #f)
-;;     ((eq? key (caar alist))
-;;         (car alist))
-;;     (else
-;;         (assq key (cdr alist)))))
+(define (assq key alist) (cond
+    ((null? alist)
+        #f)
+    ((eq? key (caar alist))
+        (car alist))
+    (else
+        (assq key (cdr alist)))))
 
-;; (define (foldr f z xs)
-;;     (if (null? xs)
-;;         z
-;;         (f (car xs) (foldr f z (cdr xs)))))
+(define (foldr f z xs)
+    (if (null? xs)
+        z
+        (f (car xs) (foldr f z (cdr xs)))))
 
-;; (define (append a b)
-;;     (foldr cons b a))
+(define (append a b)
+    (foldr cons b a))
 
-;; (define apply (wrap (vau (operative args) env
-;;     (eval env (cons
-;;         operative
-;;         (map (lambda (x) (list quote x)) args))))))
+(define apply (wrap (vau (operative args) env
+    (eval env (cons
+        operative
+        (map (lambda (x) (list quote x)) args))))))
 
 ;; ; vim: ft=scheme
+;; Local Variables:
+;; mode: scheme
+;; End:
