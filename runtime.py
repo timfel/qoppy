@@ -40,17 +40,17 @@ class Runtime(object):
             frame = env.car
             while frame is not w_nil:
                 if not isinstance(frame, W_List):
-                    raise QuoppaException("Consistency error! Non cons %s as frame cdr" % frame.to_string())
+                    raise QuoppaException("Consistency! Non pair %s as frame" % frame.to_string())
                 pair = frame.car
                 if not isinstance(pair, W_List):
-                    raise QuoppaException("Consistency error! Non pair %s in frame" % pair.to_string())
+                    raise QuoppaException("Consistency! Non pair %s in frame" % pair.to_string())
                 if pair.car.equal(name):
                     return pair
                 frame = frame.cdr
             env = env.cdr
             if not isinstance(env, W_List):
-                    raise QuoppaException("Consistency error! Non cons %s as env cdr" % env.to_string())
-        raise QuoppaException("canno find %s in env" % name.to_string())
+                    raise QuoppaException("Consistency! Non cons %s as env cdr" % env.to_string())
+        raise QuoppaException("cannot find %s in env" % name.to_string())
 
     def m_eval(self, env, exp):
         if env is w_nil:
