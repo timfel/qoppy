@@ -27,7 +27,6 @@ def car(w_pair):
     if isinstance(w_pair, W_List) and w_pair is not w_nil:
         return w_pair.car
     else:
-        import pdb; pdb.set_trace()
         raise QuoppaException("wrong type argument %s for car" % w_pair)
 
 def cdr(w_pair):

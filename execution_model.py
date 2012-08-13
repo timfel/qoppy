@@ -254,7 +254,7 @@ class W_List(W_Object):
 
 def w_list(first, *args):
     w_l = W_List(first, w_nil)
-    for w_item in args:
+    for w_item in list(args):
         w_l.comma(W_List(w_item, w_nil))
     return w_l
 
