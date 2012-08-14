@@ -174,6 +174,30 @@ class W_Integer(W_Real):
     def to_float(self):
         return float(self.intval)
 
+class W_EofObject(W_Object):
+    pass
+w_eof = W_EofObject()
+
+class W_Stream(W_Object):
+    def __init__(self, filename):
+        from pypy.rlib.streamio import open_file_as_stream
+        self.filename = filename
+        self.contents = open_file_as_stream(filename).readall()
+        self.sexprs = None
+        self.sexpr_pos = 0
+
+    def to_string(self):
+        return "#<FileStream #{%s}>" % self.filename
+    to_repr = to_string
+
+    def next_sexpr(self):
+        if self.sexprs and self.sexpr_pos < len(self.sexprs):
+            sexpr = self.sexprs[self.sexpr_pos]
+            self.sexpr_pos += 1
+            return sexpr
+        else:
+            return w_eof
+
 class W_List(W_Object):
     def __init__(self, car, cdr):
         self.car = car

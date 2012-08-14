@@ -1,6 +1,7 @@
 import os
 
-from execution_model import (w_nil, w_true, w_false, W_Real,
+from parser import parse
+from execution_model import (w_nil, w_true, w_false, w_eof, W_Real,
                              W_Symbol, W_List, QuoppaException,
                              W_Stream)
 
@@ -119,15 +120,20 @@ def display(w_str):
 
 def read(w_stream):
     if isinstance(w_stream, W_Stream):
-        os.read(w_stream.fd, 1)
+        if w_stream.sexprs is None:
+            try:
+                w_stream.sexprs = parse(w_stream.contents)
+            except:
+                w_stream.sexprs = [W_String(w_stream.contents)]
+        return w_stream.next_sexpr()
     else:
         raise QuoppaException("cannot read from %r" % w_stream)
 
 def eof_object_p(w_obj):
-    if isinstance(w_obj, W_String) and str(w_obj) == "":
+    if w_obj is w_eof:
         return w_true
     else:
         return w_false
 
 def open_input_file(w_str):
-    pass
+    return W_Stream(w_str.to_string())
