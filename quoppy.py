@@ -13,7 +13,8 @@ from execution_model import w_nil, QuoppaException
 def get_runtime():
     from primitives import (m_bool, eq_p, null_p, symbol_p, pair_p, cons,
                             car, cdr, set_car_b, set_cdr_b, plus, times, minus,
-                            div, less_or_eq, eq, error, display)
+                            div, less_or_eq, eq, error, display,
+                            read, eof_object_p, open_input_file)
     return Runtime({
             "bool": m_bool,
             "eq?": eq_p,
@@ -33,6 +34,9 @@ def get_runtime():
             "=": eq,
             "error": error,
             "display": display,
+            "read": read,
+            "eof-object?": eof_object_p,
+            "open-input-file": open_input_file
     })
 
 def entry_point(argv):

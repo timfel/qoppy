@@ -1,7 +1,8 @@
 import os
 
 from execution_model import (w_nil, w_true, w_false, W_Real,
-                             W_Symbol, W_List, QuoppaException)
+                             W_Symbol, W_List, QuoppaException,
+                             W_Stream)
 
 def m_bool(b, t, f):
     if b.to_boolean():
@@ -115,3 +116,18 @@ def error(w_msg = None):
 def display(w_str):
     os.write(1, w_str.to_string())
     return w_nil
+
+def read(w_stream):
+    if isinstance(w_stream, W_Stream):
+        os.read(w_stream.fd, 1)
+    else:
+        raise QuoppaException("cannot read from %r" % w_stream)
+
+def eof_object_p(w_obj):
+    if isinstance(w_obj, W_String) and str(w_obj) == "":
+        return w_true
+    else:
+        return w_false
+
+def open_input_file(w_str):
+    pass
