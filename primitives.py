@@ -2,7 +2,7 @@ import os
 
 from parser import parse
 from execution_model import (w_nil, w_true, w_false, w_eof, W_Real,
-                             W_Symbol, W_List, QuoppaException,
+                             W_Symbol, W_String, W_List, QuoppaException,
                              W_Stream)
 
 def m_bool(b, t, f):
