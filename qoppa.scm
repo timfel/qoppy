@@ -1,3 +1,112 @@
+;; _Computation in Scheme_
+;; * Scheme explicitely builts upon λ calculus
+;;   y_combinator.jpg
+;;   * and that's all there is to that
+
+
+
+
+
+;; _No, of course not._
+;;
+;;  * Scheme has special forms
+;;       * lambda, define, let, define-syntax, quote ...
+;;
+;; How would you implement quote?
+
+
+
+
+
+
+
+
+
+
+
+;;  _We have to learn them all_
+;;
+;;
+;; learn.jpg
+;; * But I don't like to learn so much ...
+
+
+
+
+
+
+
+;; _Fexprs_
+;;
+;; * first-class values
+;;     * Arguments are unevaluated ASTs
+;;     * Reference to environment on call
+;; * Supported until Lisp 1.5 (1958)
+;;
+;; Later removed in favour of static-analysis
+;; optimization possibilities
+
+
+
+
+
+
+
+
+;; _Let's do this!_
+;; http://mainisusuallyafunction.blogspot.de/
+;; * Describe a language (Qoppa) built only with Fexprs
+;;   * Re-uses few Scheme primitives
+;;   * Implements Scheme as library for Qoppa
+;; 
+;; All misunderstandings are mine
+
+
+
+
+
+
+
+
+
+
+(define quote
+  (vau (x) env
+       x))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(define list (vau xs env
+    (if (null? xs)
+        (quote ())
+        (cons
+            (eval env (car xs))
+            (eval env (cons list (cdr xs)))))))
+
+
+
+
+
+
+
+
+
+
+;; _About the Environment_
+;; * let's define ourselves an environment
+;;   (with frames, and key-value pairs)
+;;
 (define (bind param val) (cond
     ((and (null? param) (null? val))
         '())
@@ -12,6 +121,11 @@
     (else
         (error "can't bind" param val))))
 
+
+
+
+
+
 (define (m-lookup name env)
     (if (null? env)
         (error "could not find" name)
@@ -19,6 +133,12 @@
             (if binding
                 binding
                 (m-lookup name (cdr env))))))
+
+
+
+
+
+
 
 (define (m-eval env exp) (cond
     ((symbol? exp)
@@ -30,6 +150,10 @@
 
 (define (m-operate env operative operands)
     (operative env operands))
+
+
+
+
 
 (define (m-vau static-env vau-operands)
     (let ((params    (car   vau-operands))
@@ -44,6 +168,9 @@
                         (cons dynamic-env operands))
                     static-env)
                 body))))
+
+
+
 
 (define (make-global-frame)
     (define (wrap-primitive fun)
@@ -91,3 +218,4 @@
         (loop)))
 
 (execute-file "test.qop")
+
