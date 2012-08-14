@@ -1,8 +1,7 @@
-;; _Computation in Scheme_
+;; _Let's talk about Scheme_
 ;; * Scheme explicitely builts upon λ calculus
 ;;   y_combinator.jpg
 ;;   * and that's all there is to that
-
 
 
 
@@ -68,7 +67,7 @@
 
 
 
-
+((vau (x) env x) '(+ 1 2)) # => (+ 1 2)
 
 (define quote
   (vau (x) env
@@ -172,6 +171,9 @@
 
 
 
+;; _Let's run this baby_
+;; * We need some kind of bottom "stack frame"
+;;     * This includes some necessary + nice-to-have primitives
 (define (make-global-frame)
     (define (wrap-primitive fun)
         (lambda (env operands)
