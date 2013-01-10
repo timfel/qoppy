@@ -5,39 +5,10 @@ from pypy.rlib.objectmodel import specialize
 from pypy.rlib.streamio import open_file_as_stream
 from pypy.rlib.parsing.makepackrat import BacktrackException
 
-from parser import parse
-from runtime import Runtime
-from execution_model import w_nil, QuoppaException
+from qoppy.parser import parse
+from qoppy.runtime import Runtime, get_runtime
+from qoppy.execution_model import w_nil, QuoppaException
 
-@specialize.memo()
-def get_runtime():
-    from primitives import (m_bool, eq_p, null_p, symbol_p, pair_p, cons,
-                            car, cdr, set_car_b, set_cdr_b, plus, times, minus,
-                            div, less_or_eq, eq, error, display,
-                            read, eof_object_p, open_input_file)
-    return Runtime({
-            "bool": m_bool,
-            "eq?": eq_p,
-            "null?": null_p,
-            "symbol?": symbol_p,
-            "pair?": pair_p,
-            "cons": cons,
-            "car": car,
-            "cdr": cdr,
-            "set-car!": set_car_b,
-            "set-cdr!": set_cdr_b,
-            "+": plus,
-            "*": times,
-            "-": minus,
-            "/": div,
-            "<=": less_or_eq,
-            "=": eq,
-            "error": error,
-            "display": display,
-            "read": read,
-            "eof-object?": eof_object_p,
-            "open-input-file": open_input_file
-    })
 
 def entry_point(argv):
     if len(argv) == 2:
@@ -52,7 +23,8 @@ def entry_point(argv):
 
         for sexpr in t:
             try:
-                runtime.m_eval(w_nil, sexpr)
+                #runtime.m_eval(w_nil, sexpr)
+                runtime.interpret(w_nil, sexpr)
             except QuoppaException as e:
                 os.write(1, "%s\n" % str(e))
                 os.write(1, "%s\n" % str(e.msg))
