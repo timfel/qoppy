@@ -3,6 +3,38 @@ from pypy.rlib.objectmodel import specialize
 from execution_model import (W_List, symbol, w_nil, W_Symbol, QuoppaException,
                              W_Vau, W_Primitive, W_Fexpr, w_list)
 
+
+@specialize.memo()
+def get_runtime():
+    from primitives import (m_bool, eq_p, null_p, symbol_p, pair_p, cons,
+                            car, cdr, set_car_b, set_cdr_b, plus, times, minus,
+                            div, less_or_eq, eq, error, display,
+                            read, eof_object_p, open_input_file)
+    return Runtime({
+            "bool": m_bool,
+            "eq?": eq_p,
+            "null?": null_p,
+            "symbol?": symbol_p,
+            "pair?": pair_p,
+            "cons": cons,
+            "car": car,
+            "cdr": cdr,
+            "set-car!": set_car_b,
+            "set-cdr!": set_cdr_b,
+            "+": plus,
+            "*": times,
+            "-": minus,
+            "/": div,
+            "<=": less_or_eq,
+            "=": eq,
+            "error": error,
+            "display": display,
+            "read": read,
+            "eof-object?": eof_object_p,
+            "open-input-file": open_input_file
+    })
+
+
 class Runtime(object):
     @specialize.memo()
     def __init__(self, primitives):
@@ -82,3 +114,15 @@ class Runtime(object):
         body = body_cdr.car
 
         return W_Fexpr(env_param, params, static_env, body)
+
+
+    def interpret(self, env, fexpr):
+        while isinstance(fexpr, W_Fexpr):
+            fexpr = self.m_eval(env, fexpr)
+        return fexpr
+
+
+
+
+            
+            

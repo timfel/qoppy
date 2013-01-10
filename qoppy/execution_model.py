@@ -298,7 +298,8 @@ class W_Fexpr(W_Object):
         local_names = W_List(self.env_param, self.params)
         local_values = W_List(dynamic_env, operands)
         local_env = W_List(runtime.bind(local_names, local_values), self.static_env)
-        return runtime.m_eval(local_env, self.body)
+        return W_Fexpr(w_nil, w_nil, local_env, self.body)
+    # return runtime.m_eval(local_env, self.body)
 
 class W_Primitive(W_Fexpr):
     @specialize.memo()
