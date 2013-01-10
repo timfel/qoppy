@@ -1,7 +1,7 @@
 from pypy.rlib.objectmodel import specialize
 
 from execution_model import (W_List, symbol, w_nil, W_Symbol, QuoppaException,
-                             W_Vau, W_Primitive, W_Fexpr, w_list)
+                             W_Vau, W_Primitive, W_Fexpr, w_list, W_Eval, W_PrimitiveEval)
 
 class Runtime(object):
     @specialize.memo()
@@ -62,7 +62,9 @@ class Runtime(object):
         elif exp is w_nil:
             return w_nil
         elif isinstance(exp, W_List):
-            return self.operate(env, self.m_eval(env, exp.car), exp.cdr)
+            import pdb; pdb.set_trace()
+            raise QuoppaException("should not happen")
+            # return self.operate(env, self.m_eval(env, exp.car), exp.cdr)
         else:
             return exp
 
@@ -82,3 +84,38 @@ class Runtime(object):
         body = body_cdr.car
 
         return W_Fexpr(env_param, params, static_env, body)
+
+    def interpret(self, env, w_exp):
+        if env is w_nil:
+            env = self.global_env
+        stack_w = []
+        while True:
+            if isinstance(w_exp, W_List) and not w_exp is w_nil:
+                stack_w.append(w_exp.cdr) # stash arguments
+                w_exp = w_exp.car
+            elif isinstance(w_exp, W_Primitive):
+                w_operands = stack_w.pop() # retrieve arguments
+                w_exp = w_exp.call(self, env, w_operands)
+            elif isinstance(w_exp, W_Fexpr):
+                w_operands = stack_w.pop() # retrieve arguments
+                w_exp = w_exp.call(self, env, w_operands)
+            elif isinstance(w_exp, W_Eval):
+                w_exp = self.interpret(w_exp.env, w_exp.w_body) # next stackframe
+            elif isinstance(w_exp, W_PrimitiveEval):
+                operands_w = []
+                w_operands = w_exp.w_operands
+                while w_operands is not w_nil:
+                    assert isinstance(w_operands, W_List)
+                    operands_w.append(self.interpret(w_exp.env, w_operands.car)) # new frame
+                    w_operands = w_operands.cdr
+                w_exp = w_exp.execute(operands_w)
+            elif len(stack_w) > 0:
+                # stack not empty, continue with interpretation
+                w_exp = self.m_eval(env, w_exp)
+                if isinstance(stack_w[-1], W_PrimitiveEval):
+                    # we're evaluating something for a primitive eval
+                    w_primeval = stack_w.pop() # get primitive eval
+                    w_primeval.append_operand(w_exp) # add new calculated operand
+                    w_exp = w_primeval
+            else:
+                return self.m_eval(env, w_exp)
