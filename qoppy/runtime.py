@@ -49,7 +49,6 @@ class Runtime(object):
     jitdriver = jit.JitDriver(
         greens=["stack_w"],
         reds=["self", "env", "w_exp"],
-        virtualizables=["w_exp"],
         get_printable_location=get_printable_location,
     )
 
