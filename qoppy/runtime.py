@@ -124,10 +124,14 @@ class Runtime(object):
                     operands_w.append(self.m_eval(w_exp.env, w_operands.car)) # new frame
                     w_operands = w_operands.cdr
                 return w_exp.execute(operands_w)
+            elif len(stack_w) > 0:
+                if isinstance(w_exp, W_Symbol):
+                    cdr = self.lookup(w_exp, env).cdr
+                    assert isinstance(cdr, W_List) and cdr is not w_nil
+                    w_exp = cdr.car
             elif isinstance(w_exp, W_Symbol):
                 cdr = self.lookup(w_exp, env).cdr
                 assert isinstance(cdr, W_List) and cdr is not w_nil
-                w_exp = cdr.car
-            
-            if len(stack_w) == 0:                
+                return cdr.car
+            else:
                 return w_exp
