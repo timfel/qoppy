@@ -1,10 +1,23 @@
+from pypy.rlib import jit
 from pypy.rlib.objectmodel import specialize
 
 from execution_model import (W_List, symbol, w_nil, W_Symbol, QuoppaException,
                              W_Vau, W_Primitive, W_Fexpr, w_list,
                              W_Call, W_FexprCall, W_PrimitiveCall)
 
+
+def get_printable_location(stack_w):
+    return "stack is %s" % stack_w.to_string()
+
+
 class Runtime(object):
+    jitdriver = jit.JitDriver(
+        greens=["stack_w"],
+        reds=["self", "env", "w_exp"],
+        virtualizables=["w_exp"],
+        get_printable_location=get_printable_location,
+    )
+
     @specialize.memo()
     def __init__(self, primitives):
         vau = W_Vau(self.vau)
@@ -75,6 +88,9 @@ class Runtime(object):
             env = self.global_env
         stack_w = []
         while True:
+            self.jitdriver.jit_merge_point(
+                stack_w=stack_w, self=self, env=env, w_exp=w_exp
+            )
             if isinstance(w_exp, W_List) and not w_exp is w_nil:
                 stack_w.append(W_Call(w_exp.cdr)) # stash arguments
                 w_exp = w_exp.car
