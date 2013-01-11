@@ -85,22 +85,6 @@ class Runtime(object):
                     raise QuoppaException("Consistency! Non cons %s as env cdr" % env.to_string())
         raise QuoppaException("cannot find %s in env" % name.to_string())
 
-    def m_eval(self, env, exp):
-        if env is w_nil:
-            env = self.global_env
-        if isinstance(exp, W_Symbol):
-            cdr = self.lookup(exp, env).cdr
-            assert isinstance(cdr, W_List) and cdr is not w_nil
-            return cdr.car
-        elif exp is w_nil:
-            return w_nil
-        elif isinstance(exp, W_List):
-            import pdb; pdb.set_trace()
-            raise QuoppaException("should not happen")
-            # return self.operate(env, self.m_eval(env, exp.car), exp.cdr)
-        else:
-            return exp
-
     def operate(self, env, fexpr, operands):
         return fexpr.call(self, env, operands)
 
@@ -118,7 +102,7 @@ class Runtime(object):
 
         return W_Fexpr(env_param, params, static_env, body)
 
-    def interpret(self, env, w_exp):
+    def m_eval(self, env, w_exp):
         if env is w_nil:
             env = self.global_env
         stack_w = []
@@ -131,17 +115,19 @@ class Runtime(object):
                 w_operands = stack_w.pop().w_operands
                 w_exp = w_exp.call(self, env, w_operands)
             elif isinstance(w_exp, W_FexprCall):
-                return self.interpret(w_exp.env, w_exp.w_body) # new frame
+                return self.m_eval(w_exp.env, w_exp.w_body) # new frame
             elif isinstance(w_exp, W_PrimitiveCall):
                 operands_w = []
                 w_operands = w_exp.w_operands
                 while w_operands is not w_nil:
                     assert isinstance(w_operands, W_List)
-                    operands_w.append(self.interpret(w_exp.env, w_operands.car)) # new frame
+                    operands_w.append(self.m_eval(w_exp.env, w_operands.car)) # new frame
                     w_operands = w_operands.cdr
                 return w_exp.execute(operands_w)
-            elif len(stack_w) > 0:
-                # stack not empty, continue with interpretation
-                w_exp = self.m_eval(env, w_exp)
-            else:
-                return self.m_eval(env, w_exp)
+            elif isinstance(w_exp, W_Symbol):
+                cdr = self.lookup(w_exp, env).cdr
+                assert isinstance(cdr, W_List) and cdr is not w_nil
+                w_exp = cdr.car
+            
+            if len(stack_w) == 0:                
+                return w_exp
