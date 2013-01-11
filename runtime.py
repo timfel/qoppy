@@ -99,7 +99,7 @@ class Runtime(object):
                 w_operands = stack_w.pop().w_operands
                 w_exp = w_exp.call(self, env, w_operands)
             elif isinstance(w_exp, W_FexprCall):
-                w_exp = self.interpret(w_exp.env, w_exp.w_body) # new frame
+                return self.interpret(w_exp.env, w_exp.w_body) # new frame
             elif isinstance(w_exp, W_PrimitiveCall):
                 operands_w = []
                 w_operands = w_exp.w_operands
@@ -107,7 +107,7 @@ class Runtime(object):
                     assert isinstance(w_operands, W_List)
                     operands_w.append(self.interpret(w_exp.env, w_operands.car)) # new frame
                     w_operands = w_operands.cdr
-                w_exp = w_exp.execute(operands_w)
+                return w_exp.execute(operands_w)
             elif len(stack_w) > 0:
                 # stack not empty, continue with interpretation
                 w_exp = self.m_eval(env, w_exp)
