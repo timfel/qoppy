@@ -14,9 +14,6 @@ def test_primitives():
     w_res = r.interpret(w_nil, parse('"foo"')[0])
     assert isinstance(w_res, W_String)
 
-    w_res = r.interpret(w_nil, parse('barf')[0])
-    assert isinstance(w_res, W_Symbol)
-
     w_res = r.interpret(w_nil, parse("1.1")[0])
     assert isinstance(w_res, W_Real)
 
