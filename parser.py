@@ -131,8 +131,8 @@ class QuoppaParser(PackratParser):
     """
 
 def parse(code):
-    p = QuoppaParser()
-    p.init_parser(code)
+    p = QuoppaParser(code)
+    # p.init_parser(code)
     return p.file()
 
 ##
