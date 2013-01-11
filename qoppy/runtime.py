@@ -123,7 +123,9 @@ class Runtime(object):
                     assert isinstance(w_operands, W_List)
                     operands_w.append(self.m_eval(w_exp.env, w_operands.car)) # new frame
                     w_operands = w_operands.cdr
-                return w_exp.execute(operands_w)
+                w_exp = w_exp.execute(operands_w)
+                if not isinstance(w_exp, W_Call):
+                    return w_exp
             elif len(stack_w) > 0:
                 if isinstance(w_exp, W_Symbol):
                     cdr = self.lookup(w_exp, env).cdr

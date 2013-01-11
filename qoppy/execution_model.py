@@ -341,12 +341,12 @@ class W_Call(W_Object):
     def __init__(self, w_operands):
         self.w_operands = w_operands
 
-class W_FexprCall(W_Object):
+class W_FexprCall(W_Call):
     def __init__(self, env, w_body):
         self.env = env
         self.w_body = w_body
 
-class W_PrimitiveCall(W_Object):
+class W_PrimitiveCall(W_Call):
     def __init__(self, env, w_primitive, w_operands):
         self.env = env
         self.w_primitive = w_primitive
