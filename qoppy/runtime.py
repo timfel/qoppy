@@ -1,7 +1,8 @@
 from pypy.rlib.objectmodel import specialize
 
 from execution_model import (W_List, symbol, w_nil, W_Symbol, QuoppaException,
-                             W_Vau, W_Primitive, W_Fexpr, w_list)
+                             W_Vau, W_Primitive, W_Fexpr, w_list,
+                             W_Call, W_FexprCall, W_PrimitiveCall)
 
 
 @specialize.memo()
@@ -94,7 +95,9 @@ class Runtime(object):
         elif exp is w_nil:
             return w_nil
         elif isinstance(exp, W_List):
-            return self.operate(env, self.m_eval(env, exp.car), exp.cdr)
+            import pdb; pdb.set_trace()
+            raise QuoppaException("should not happen")
+            # return self.operate(env, self.m_eval(env, exp.car), exp.cdr)
         else:
             return exp
 
@@ -115,14 +118,30 @@ class Runtime(object):
 
         return W_Fexpr(env_param, params, static_env, body)
 
-
-    def interpret(self, env, fexpr):
-        while isinstance(fexpr, W_Fexpr):
-            fexpr = self.m_eval(env, fexpr)
-        return fexpr
-
-
-
-
-            
-            
+    def interpret(self, env, w_exp):
+        if env is w_nil:
+            env = self.global_env
+        stack_w = []
+        while True:
+            if isinstance(w_exp, W_List) and not w_exp is w_nil:
+                stack_w.append(W_Call(w_exp.cdr)) # stash arguments
+                w_exp = w_exp.car
+            elif (isinstance(w_exp, W_Fexpr) and stack_w and
+                  isinstance(stack_w[-1], W_Call)):
+                w_operands = stack_w.pop().w_operands
+                w_exp = w_exp.call(self, env, w_operands)
+            elif isinstance(w_exp, W_FexprCall):
+                w_exp = self.interpret(w_exp.env, w_exp.w_body) # new frame
+            elif isinstance(w_exp, W_PrimitiveCall):
+                operands_w = []
+                w_operands = w_exp.w_operands
+                while w_operands is not w_nil:
+                    assert isinstance(w_operands, W_List)
+                    operands_w.append(self.interpret(w_exp.env, w_operands.car)) # new frame
+                    w_operands = w_operands.cdr
+                w_exp = w_exp.execute(operands_w)
+            elif len(stack_w) > 0:
+                # stack not empty, continue with interpretation
+                w_exp = self.m_eval(env, w_exp)
+            else:
+                return self.m_eval(env, w_exp)

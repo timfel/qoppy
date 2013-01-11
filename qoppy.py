@@ -23,7 +23,6 @@ def entry_point(argv):
 
         for sexpr in t:
             try:
-                #runtime.m_eval(w_nil, sexpr)
                 runtime.interpret(w_nil, sexpr)
             except QuoppaException as e:
                 os.write(1, "%s\n" % str(e))
