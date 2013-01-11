@@ -298,7 +298,7 @@ class W_Fexpr(W_Object):
         local_names = W_List(self.env_param, self.params)
         local_values = W_List(dynamic_env, operands)
         local_env = W_List(runtime.bind(local_names, local_values), self.static_env)
-        return W_Eval(local_env, self.body)
+        return W_FexprCall(local_env, self.body)
 
 class W_Primitive(W_Fexpr):
     @specialize.memo()
@@ -331,18 +331,22 @@ class W_Primitive(W_Fexpr):
     to_repr = to_string
 
     def call(self, runtime, env, operands):
-        return W_PrimitiveEval(env, self, operands)
+        return W_PrimitiveCall(env, self, operands)
 
 class W_Vau(W_Primitive):
     def call(self, runtime, env, operands):
         return self.fun([env, operands])
 
-class W_Eval(W_Object):
+class W_Call(W_Object):
+    def __init__(self, w_operands):
+        self.w_operands = w_operands
+
+class W_FexprCall(W_Object):
     def __init__(self, env, w_body):
         self.env = env
         self.w_body = w_body
 
-class W_PrimitiveEval(W_Object):
+class W_PrimitiveCall(W_Object):
     def __init__(self, env, w_primitive, w_operands):
         self.env = env
         self.w_primitive = w_primitive
