@@ -1,1 +1,1 @@
-python ../pypy/pypy/translator/goal/translate.py qoppy.py
+python ../pypy/pypy/translator/goal/translate.py targetqoppystandalone.py

@@ -35,7 +35,8 @@ def entry_point(argv):
         print "Usage: %s [quoppa source file]" % argv[0]
         return 1
 
-def target(*args):
+def target(driver, *args):
+    driver.exe_name = 'qoppy-%(backend)s'
     return entry_point, None
 
 if __name__ == "__main__":
