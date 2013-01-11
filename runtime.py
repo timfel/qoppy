@@ -7,7 +7,11 @@ from execution_model import (W_List, symbol, w_nil, W_Symbol, QuoppaException,
 
 
 def get_printable_location(stack_w):
-    return "stack is %s" % stack_w.to_string()
+    stack = []
+    for i in stack_w:
+        stack += ("stack is %s" % stack_w.to_string())
+        stack += "\n"
+    return "".join(stack)
 
 
 class Runtime(object):
