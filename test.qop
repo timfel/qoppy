@@ -35,10 +35,15 @@
         (eval static-env
             (list vau params '_ body)))))
 
-(define fact (lambda (n)
-    (if (<= n 1)
-        1
-        (* n (fact (- n 1))))))
+;; (define fact (lambda (n)
+;;     (if (<= n 1)
+;;         1
+;;         (* n (fact (- n 1))))))
+
+(define fact (vau (n) env
+       (if (<= (eval env n) 1)
+	   1
+	   (* (eval env n) (fact (- (eval env n) 1))))))
 
 (display (fact 5)) (display "\n")
 

@@ -341,7 +341,6 @@ class W_OperateCall(W_PrimitiveCall):
         stack = stack.cdr
         operands = stack.car
         stack = stack.cdr
-
         return W_List(op_env, env_stack), W_List(operands, stack), w_list(fexpr, W_Return()).comma(operand_stack)
 
     def to_repr(self):
