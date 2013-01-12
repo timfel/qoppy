@@ -48,7 +48,7 @@ def get_printable_location(stack_w):
 class Runtime(object):
     jitdriver = jit.JitDriver(
         greens=[],
-        reds=["self", "env"],
+        reds=["self", "env_stack"],
         get_printable_location=get_printable_location,
     )
 
@@ -118,16 +118,15 @@ class Runtime(object):
         return W_Fexpr(env_param, params, static_env, body)
 
     def interpret(self, env, w_exp):
-        if env is w_nil:
-            env = self.global_env
         stack = w_nil
         operand_stack = w_list(w_exp)
+        env_stack = w_list(env if env is not w_nil else self.global_env)
         while operand_stack is not w_nil:
             self.jitdriver.jit_merge_point(
-                self=self, env=env,
+                self=self, env_stack=env_stack,
             )
             w_exp = operand_stack.car
-            env, stack, operand_stack = w_exp.compile(self, env, stack, operand_stack.cdr)
+            env_stack, stack, operand_stack = w_exp.compile(self, env_stack, stack, operand_stack.cdr)
         return stack.car
 
     def execute(self, code):
