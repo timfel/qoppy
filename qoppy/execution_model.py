@@ -236,6 +236,15 @@ class W_List(W_Object):
         else: #end proper list with dotted
             return car + " . " + cdr.to_string()
 
+    def to_array(self):
+        ary = []
+        l = self
+        while l is not w_nil:
+            assert isinstance(l, W_List)
+            l.append(l.car)
+            l.cdr
+        return ary
+
     def to_repr(self):
         return "(" + self.to_lrepr() + ")"
 
