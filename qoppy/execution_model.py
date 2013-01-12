@@ -332,6 +332,9 @@ class W_PrimitiveCall(W_Object):
         w_res = self.w_primitive.fun(operands_w)
         return env, W_List(w_res, stack), operand_stack
 
+    def to_repr(self):
+        return "#<primitive %s>" % self.w_primitive.fun
+
 
 class W_OperateCall(W_PrimitiveCall):
     def compile(self, runtime, env, stack, operand_stack):
@@ -343,6 +346,9 @@ class W_OperateCall(W_PrimitiveCall):
         stack = stack.cdr
         return W_List(op_env, env), W_List(operands, stack), w_list(fexpr, W_Return()).comma(operand_stack)
 
+    def to_repr(self):
+        return "#<operate>"
+
 
 class W_EvalCall(W_PrimitiveCall):
     def compile(self, runtime, env, stack, operand_stack):
@@ -352,10 +358,16 @@ class W_EvalCall(W_PrimitiveCall):
         stack = stack.cdr
         return W_List(eval_env, env), stack, w_list(w_exp, W_Return()).comma(operand_stack)
 
+    def to_repr(self):
+        return "#<eval>"
+
 
 class W_Call(W_Object):
     def __init__(self, w_operands):
         self.w_operands = w_operands
+
+    def to_repr(self):
+        return "#<call>"
 
     def compile(self, runtime, env, stack, operand_stack):
         fexpr = stack.car
@@ -367,6 +379,9 @@ class W_Call(W_Object):
 class W_Return(W_Object):
     def compile(self, runtime, env, stack, operand_stack):
         return env.cdr, stack, operand_stack
+
+    def to_repr(self):
+        return "#<return>"
 
 
 class W_Fexpr(W_Object):

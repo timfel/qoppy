@@ -93,12 +93,14 @@ class Runtime(object):
                 pair = frame.car
                 if not isinstance(pair, W_List):
                     raise QuoppaException("Consistency! Non pair %s in frame" % pair.to_string())
+                if not isinstance(pair.car, W_Symbol):
+                    raise QuoppaException("Consistency! Non symbol %s in pair" % pair.to_string())
                 if pair.car.equal(name):
                     return pair
                 frame = frame.cdr
             env = env.cdr
             if not isinstance(env, W_List):
-                    raise QuoppaException("Consistency! Non cons %s as env cdr" % env.to_string())
+                raise QuoppaException("Consistency! Non cons %s as env cdr" % env.to_string())
         raise QuoppaException("cannot find %s in env" % name.to_string())
 
     def vau(self, static_env, vau_operands):
