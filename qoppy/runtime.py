@@ -1,9 +1,9 @@
 from pypy.rlib import jit
 from pypy.rlib.objectmodel import specialize
 
+from parser import parse
 from execution_model import (W_List, symbol, w_nil, W_Symbol, QuoppaException,
-                             W_Vau, W_Operate, W_Primitive, W_Fexpr, w_list,
-                             W_Call, W_PrimitiveCall)
+                             W_Vau, W_Operate, W_Eval, W_Primitive, W_Fexpr, w_list)
 
 
 @specialize.memo()
@@ -57,8 +57,8 @@ class Runtime(object):
         vau = W_Vau(self.vau)
         global_frame = self.bind(symbol("vau"), vau)
         global_frame.comma(w_list(w_list(symbol("operate"), W_Operate())))
+        global_frame.comma(w_list(w_list(symbol("eval"), W_Eval())))
 
-        primitives["eval"] = self.m_eval
         primitives["lookup"] = self.lookup
         for name in primitives:
             prim = W_Primitive(primitives[name])
@@ -115,7 +115,7 @@ class Runtime(object):
 
         return W_Fexpr(env_param, params, static_env, body)
 
-    def m_eval(self, env, w_exp):
+    def interpret(self, env, w_exp):
         if env is w_nil:
             env = self.global_env
         stack = w_nil
@@ -127,3 +127,10 @@ class Runtime(object):
             w_exp = operand_stack.car
             env, stack, operand_stack = w_exp.compile(self, env, stack, operand_stack.cdr)
         return stack.car
+
+    def execute(self, code):
+        t = parse(code)
+        w_res = None
+        for s in t:
+            w_res = self.interpret(w_nil, s)
+        return w_res

@@ -272,7 +272,6 @@ class W_List(W_Object):
             return self
 
     def compile(self, runtime, env, stack, operand_stack):
-        # Resolve function, run call with function, return
         return env, stack, w_list(self.car, W_Call(self.cdr)).comma(operand_stack)
 
 
@@ -306,7 +305,59 @@ class W_Nil(W_List):
 
     cons = comma
 
+    def compile(self, runtime, env, stack, operand_stack):
+        return env, W_List(self, stack), operand_stack
+
 w_nil = W_Nil()
+
+
+class W_PrimitiveCall(W_Object):
+    def __init__(self, w_primitive):
+        self.w_primitive = w_primitive
+
+    def compile(self, runtime, env, stack, operand_stack):
+        operands_w = []
+        for i in xrange(self.w_primitive.arg_count):
+            operands_w.append(stack.car)
+            stack = stack.cdr
+        w_res = self.w_primitive.fun(operands_w)
+        return env, W_List(w_res, stack), operand_stack
+
+
+class W_OperateCall(W_PrimitiveCall):
+    def compile(self, runtime, env, stack, operand_stack):
+        op_env = stack.car
+        stack = stack.cdr
+        fexpr = stack.car
+        stack = stack.cdr
+        operands = stack.car
+        stack = stack.cdr
+        return W_List(op_env, env), W_List(operands, stack), w_list(fexpr, W_Return()).comma(operand_stack)
+
+
+class W_EvalCall(W_PrimitiveCall):
+    def compile(self, runtime, env, stack, operand_stack):
+        eval_env = stack.car
+        stack = stack.cdr
+        w_exp = stack.car
+        stack = stack.cdr
+        return W_List(eval_env, env), stack, w_list(w_exp, W_Return()).comma(operand_stack)
+
+
+class W_Call(W_Object):
+    def __init__(self, w_operands):
+        self.w_operands = w_operands
+
+    def compile(self, runtime, env, stack, operand_stack):
+        fexpr = stack.car
+        stack = stack.cdr
+        assert isinstance(fexpr, W_Fexpr)
+        return env, W_List(self.w_operands, stack), W_List(fexpr, operand_stack)
+
+
+class W_Return(W_Object):
+    def compile(self, runtime, env, stack, operand_stack):
+        return env.cdr, stack, operand_stack
 
 
 class W_Fexpr(W_Object):
@@ -331,7 +382,34 @@ class W_Fexpr(W_Object):
         return local_env, stack, w_list(self.body, W_Return()).comma(operand_stack)
 
 
-class W_Primitive(W_Fexpr):
+class W_BasePrimitive(W_Fexpr):
+    CallClass = W_PrimitiveCall
+
+    def __init__(self):
+        self.arg_count = 0
+
+    def to_string(self):
+        return "#<a primitive>"
+    to_repr = to_string
+
+    def compile(self, runtime, env, stack, operand_stack):
+        argcount = 0
+        w_operands = stack.car
+        stack = stack.cdr
+        operand_stack = W_List(self.CallClass(self), operand_stack)
+        while w_operands is not w_nil:
+            assert isinstance(w_operands, W_List)
+            operand_stack = W_List(w_operands.car, operand_stack)
+            w_operands = w_operands.cdr
+            argcount += 1
+        if argcount < self.arg_count:
+            raise QuoppaException("too few arguments to primitive")
+        elif argcount > self.arg_count:
+            raise QuoppaException("too many arguments to primitive")
+        return env, stack, operand_stack
+
+
+class W_Primitive(W_BasePrimitive):
     @specialize.memo()
     def __init__(self, fun):
         code = fun.__code__
@@ -357,27 +435,6 @@ class W_Primitive(W_Fexpr):
         self.arg_count = arg_count
         self.fun = namespace[fun.__name__]
 
-    def to_string(self):
-        return "#<a primitive>"
-
-    to_repr = to_string
-
-    def compile(self, runtime, env, stack, operand_stack):
-        argcount = 0
-        w_operands = stack.car
-        stack = stack.cdr
-        operand_stack = W_List(W_PrimitiveCall(self), operand_stack)
-        while w_operands is not w_nil:
-            assert isinstance(w_operands, W_List)
-            operand_stack = W_List(w_operands.car, operand_stack)
-            w_operands = w_operands.cdr
-            argcount += 1
-        if argcount < self.arg_count:
-            raise QuoppaException("too few arguments to primitive")
-        elif argcount > self.arg_count:
-            raise QuoppaException("too many arguments to primitive")
-        return env, stack, operand_stack
-
 
 class W_Vau(W_Primitive):
     def compile(self, runtime, env, stack, operand_stack):
@@ -386,44 +443,15 @@ class W_Vau(W_Primitive):
         return env, W_List(self.fun([env, w_operands]), stack), operand_stack
 
 
-class W_Operate(W_Primitive):
+class W_Operate(W_BasePrimitive):
+    CallClass = W_OperateCall
+
     def __init__(self):
-        pass
-
-    def compile(self, runtime, env, stack, operand_stack):
-        w_operands = stack.car
-        stack = stack.cdr
-
-        op_env = w_operands.car
-        fexpr = w_operands.cdr.car
-        operands = w_operands.cdr.cdr.car
-        return W_List(op_env, env), W_List(operands, stack), w_list(fexpr, W_Return()).comma(operand_stack)
+        self.arg_count = 3
 
 
-class W_PrimitiveCall(W_Object):
-    def __init__(self, w_primitive):
-        self.w_primitive = w_primitive
+class W_Eval(W_BasePrimitive):
+    CallClass = W_EvalCall
 
-    def compile(self, runtime, env, stack, operand_stack):
-        operands_w = []
-        for i in xrange(self.w_primitive.arg_count):
-            operands_w.append(stack.car)
-            stack = stack.cdr
-        w_res = self.w_primitive.fun(operands_w)
-        return env, W_List(w_res, stack), operand_stack
-
-
-class W_Call(W_Object):
-    def __init__(self, w_operands):
-        self.w_operands = w_operands
-
-    def compile(self, runtime, env, stack, operand_stack):
-        fexpr = stack.car
-        stack = stack.cdr
-        assert isinstance(fexpr, W_Fexpr)
-        return env, W_List(self.w_operands, stack), W_List(fexpr, operand_stack)
-
-
-class W_Return(W_Object):
-    def compile(self, runtime, env, stack, operand_stack):
-        return env.cdr, stack, operand_stack
+    def __init__(self):
+        self.arg_count = 2
