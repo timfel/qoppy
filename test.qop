@@ -1,5 +1,5 @@
-(display "HEY THERE, THIS IS QOPPA, RUNNING IN SCHEME LIB ON QOPPY")
-(display "\n")
+;; (display "HEY THERE, THIS IS QOPPA, RUNNING IN SCHEME LIB ON QOPPY")
+;; (display "\n")
 
 ((vau (name-of-define null) env
     (set-car! env (cons

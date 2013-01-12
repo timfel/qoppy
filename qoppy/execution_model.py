@@ -30,6 +30,10 @@ class W_Object(object):
     def call(self, runtime, env, operative):
         raise QuoppaException("cannot call %s" % self.to_string())
 
+    def compile(self, runtime, env, stack, operand_stack):
+        return env, W_List(self, stack), operand_stack
+
+
 class W_Undefined(W_Object):
     def to_repr(self):
         return "#<undefined>"
@@ -38,12 +42,14 @@ class W_Undefined(W_Object):
 
 w_undefined = W_Undefined()
 
+
 class W_True(W_Object):
     def to_repr(self):
         return "#t"
     to_string = to_repr
 
 w_true = W_True()
+
 
 class W_False(W_Object):
     def to_repr(self):
@@ -54,6 +60,7 @@ class W_False(W_Object):
         return False
 
 w_false = W_False()
+
 
 class W_String(W_Object):
     def __init__(self, val):
@@ -81,6 +88,7 @@ class W_String(W_Object):
             return False
         return self.strval == w_obj.strval
 
+
 class W_Symbol(W_Object):
     #class dictionary for symbol storage
     obarray = {}
@@ -92,6 +100,12 @@ class W_Symbol(W_Object):
         return self.name
 
     to_string = to_repr
+
+    def compile(self, runtime, env, stack, operand_stack):
+        cdr = runtime.lookup(self, env).cdr
+        assert isinstance(cdr, W_List) and cdr is not w_nil
+        return env, W_List(cdr.car, stack), operand_stack
+
 
 def symbol(name):
     #use this to create new symbols, it stores all symbols
@@ -105,6 +119,7 @@ def symbol(name):
 
     assert isinstance(w_symb, W_Symbol)
     return w_symb
+
 
 class W_Real(W_Object):
     def __init__(self, val):
@@ -150,7 +165,9 @@ class W_Real(W_Object):
             and self.realval == w_obj.realval
     equal = eqv
 
+
 W_Number = W_Real
+
 
 class W_Integer(W_Real):
     def __init__(self, val):
@@ -174,9 +191,11 @@ class W_Integer(W_Real):
     def to_float(self):
         return float(self.intval)
 
+
 class W_EofObject(W_Object):
     pass
 w_eof = W_EofObject()
+
 
 class W_Stream(W_Object):
     def __init__(self, filename):
@@ -197,6 +216,7 @@ class W_Stream(W_Object):
             return sexpr
         else:
             return w_eof
+
 
 class W_List(W_Object):
     def __init__(self, car, cdr):
@@ -251,11 +271,17 @@ class W_List(W_Object):
             self.cdr.comma(w_pair)
             return self
 
+    def compile(self, runtime, env, stack, operand_stack):
+        # Resolve function, run call with function, return
+        return env, stack, w_list(self.car, W_Call(self.cdr)).comma(operand_stack)
+
+
 def w_list(first, *args):
     w_l = W_List(first, w_nil)
     for w_item in list(args):
         w_l.comma(W_List(w_item, w_nil))
     return w_l
+
 
 class W_Nil(W_List):
     _w_nil = None
@@ -282,6 +308,7 @@ class W_Nil(W_List):
 
 w_nil = W_Nil()
 
+
 class W_Fexpr(W_Object):
     def __init__(self, env_param, params, static_env, body):
         self.env_param = env_param
@@ -294,11 +321,15 @@ class W_Fexpr(W_Object):
 
     to_repr = to_string
 
-    def call(self, runtime, dynamic_env, operands):
+    def compile(self, runtime, env, stack, operand_stack):
+        w_operands = stack.car
+        stack = stack.cdr
+
         local_names = W_List(self.env_param, self.params)
-        local_values = W_List(dynamic_env, operands)
+        local_values = W_List(env, w_operands)
         local_env = W_List(runtime.bind(local_names, local_values), self.static_env)
-        return W_FexprCall(local_env, self.body)
+        return local_env, stack, w_list(self.body, W_Return()).comma(operand_stack)
+
 
 class W_Primitive(W_Fexpr):
     @specialize.memo()
@@ -323,6 +354,7 @@ class W_Primitive(W_Fexpr):
         source = "\n".join(lines)
         namespace = {"func": fun}
         exec source in namespace
+        self.arg_count = arg_count
         self.fun = namespace[fun.__name__]
 
     def to_string(self):
@@ -330,27 +362,68 @@ class W_Primitive(W_Fexpr):
 
     to_repr = to_string
 
-    def call(self, runtime, env, operands):
-        return W_PrimitiveCall(env, self, operands)
+    def compile(self, runtime, env, stack, operand_stack):
+        argcount = 0
+        w_operands = stack.car
+        stack = stack.cdr
+        operand_stack = W_List(W_PrimitiveCall(self), operand_stack)
+        while w_operands is not w_nil:
+            assert isinstance(w_operands, W_List)
+            operand_stack = W_List(w_operands.car, operand_stack)
+            w_operands = w_operands.cdr
+            argcount += 1
+        if argcount < self.arg_count:
+            raise QuoppaException("too few arguments to primitive")
+        elif argcount > self.arg_count:
+            raise QuoppaException("too many arguments to primitive")
+        return env, stack, operand_stack
+
 
 class W_Vau(W_Primitive):
-    def call(self, runtime, env, operands):
-        return self.fun([env, operands])
+    def compile(self, runtime, env, stack, operand_stack):
+        w_operands = stack.car
+        stack = stack.cdr
+        return env, W_List(self.fun([env, w_operands]), stack), operand_stack
+
+
+class W_Operate(W_Primitive):
+    def __init__(self):
+        pass
+
+    def compile(self, runtime, env, stack, operand_stack):
+        w_operands = stack.car
+        stack = stack.cdr
+
+        op_env = w_operands.car
+        fexpr = w_operands.cdr.car
+        operands = w_operands.cdr.cdr.car
+        return W_List(op_env, env), W_List(operands, stack), w_list(fexpr, W_Return()).comma(operand_stack)
+
+
+class W_PrimitiveCall(W_Object):
+    def __init__(self, w_primitive):
+        self.w_primitive = w_primitive
+
+    def compile(self, runtime, env, stack, operand_stack):
+        operands_w = []
+        for i in xrange(self.w_primitive.arg_count):
+            operands_w.append(stack.car)
+            stack = stack.cdr
+        w_res = self.w_primitive.fun(operands_w)
+        return env, W_List(w_res, stack), operand_stack
+
 
 class W_Call(W_Object):
     def __init__(self, w_operands):
         self.w_operands = w_operands
 
-class W_FexprCall(W_Call):
-    def __init__(self, env, w_body):
-        self.env = env
-        self.w_body = w_body
+    def compile(self, runtime, env, stack, operand_stack):
+        fexpr = stack.car
+        stack = stack.cdr
+        assert isinstance(fexpr, W_Fexpr)
+        return env, W_List(self.w_operands, stack), W_List(fexpr, operand_stack)
 
-class W_PrimitiveCall(W_Call):
-    def __init__(self, env, w_primitive, w_operands):
-        self.env = env
-        self.w_primitive = w_primitive
-        self.w_operands = w_operands
 
-    def execute(self, args_w):
-        return self.w_primitive.fun(args_w)
+class W_Return(W_Object):
+    def compile(self, runtime, env, stack, operand_stack):
+        return env.cdr, stack, operand_stack
