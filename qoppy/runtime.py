@@ -51,27 +51,29 @@ class Runtime(object):
         get_printable_location=get_printable_location,
     )
 
+    w_underscore = symbol("_")
+
     @specialize.memo()
     def __init__(self, primitives):
         vau = W_Vau(self.vau)
         global_frame = self.bind(symbol("vau"), vau)
-        global_frame.comma(w_list(w_list(symbol("operate"), W_Operate())))
-        global_frame.comma(w_list(w_list(symbol("eval"), W_Eval())))
+        global_frame.comma(w_list([w_list([symbol("operate"), W_Operate()])]))
+        global_frame.comma(w_list([w_list([symbol("eval"), W_Eval()])]))
 
         primitives["lookup"] = self.lookup
         for name in primitives:
             prim = W_Primitive(primitives[name])
-            global_frame.comma(w_list(w_list(symbol(name), prim)))
-        self.global_env = w_list(global_frame)
+            global_frame.comma(w_list([w_list([symbol(name), prim])]))
+        self.global_env = w_list([global_frame])
 
     def bind(self, param, val):
         if param is w_nil and val is w_nil:
             return w_nil
         elif isinstance(param, W_Symbol):
-            if param.name == "_":
+            if param is self.w_underscore:
                 return w_nil
             else:
-                return w_list(w_list(param, val))
+                return w_list([w_list([param, val])])
         elif param is w_nil:
             raise QuoppaException("too many arguments")
         elif val is w_nil:
@@ -83,9 +85,9 @@ class Runtime(object):
 
     # TODO: Probably wrong, look into this
     @jit.unroll_safe
-    def lookup(self, name, env):
+    def lookup(self, w_name, env):
         if env is w_nil or not isinstance(env, W_List):
-            raise QuoppaException("cannot find %s in %s" % (name.to_string(), env.to_string()))
+            raise QuoppaException("cannot find %s in %s" % (w_name.to_string(), env.to_string()))
         while env is not w_nil:
             frame = env.car
             while frame is not w_nil:
@@ -96,13 +98,13 @@ class Runtime(object):
                     raise QuoppaException("Consistency! Non pair %s in frame" % pair.to_string())
                 if not isinstance(pair.car, W_Symbol):
                     raise QuoppaException("Consistency! Non symbol %s in pair" % pair.to_string())
-                if pair.car.equal(name):
+                if pair.car.equal(w_name):
                     return pair
                 frame = frame.cdr
             env = env.cdr
             if not isinstance(env, W_List):
                 raise QuoppaException("Consistency! Non cons %s as env cdr" % env.to_string())
-        raise QuoppaException("cannot find %s in env" % name.to_string())
+        raise QuoppaException("cannot find %s in env" % w_name.to_string())
 
     def vau(self, static_env, vau_operands):
         assert isinstance(vau_operands, W_List)
@@ -120,8 +122,8 @@ class Runtime(object):
 
     def interpret(self, env, w_exp):
         stack = w_nil
-        operand_stack = w_list(w_exp)
-        env_stack = w_list(env if env is not w_nil else self.global_env)
+        operand_stack = w_list([w_exp])
+        env_stack = w_list([env if env is not w_nil else self.global_env])
         while operand_stack is not w_nil:
             w_exp = operand_stack.car
             if isinstance(w_exp, W_Fexpr):
