@@ -324,6 +324,7 @@ class W_PrimitiveCall(W_Object):
     def compile(self, runtime, env_stack, stack, operand_stack):
         operands_w = []
         for i in xrange(self.w_primitive.arg_count):
+            assert isinstance(stack, W_List)
             operands_w.append(stack.car)
             stack = stack.cdr
         w_res = self.w_primitive.fun(operands_w)
@@ -337,8 +338,10 @@ class W_OperateCall(W_PrimitiveCall):
     def compile(self, runtime, env_stack, stack, operand_stack):
         op_env = stack.car
         stack = stack.cdr
+        assert isinstance(stack, W_List)
         fexpr = stack.car
         stack = stack.cdr
+        assert isinstance(stack, W_List)
         operands = stack.car
         stack = stack.cdr
         return W_List(op_env, env_stack), W_List(operands, stack), w_list(fexpr, W_Return()).comma(operand_stack)
@@ -351,6 +354,7 @@ class W_EvalCall(W_PrimitiveCall):
     def compile(self, runtime, env_stack, stack, operand_stack):
         eval_env = stack.car
         stack = stack.cdr
+        assert isinstance(stack, W_List)
         w_exp = stack.car
         stack = stack.cdr
         return W_List(eval_env, env_stack), stack, w_list(w_exp, W_Return()).comma(operand_stack)

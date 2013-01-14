@@ -36,19 +36,18 @@ def get_runtime():
             "open-input-file": open_input_file
     })
 
-def get_printable_location(stack_w):
-    stack = []
-    for i in stack_w:
-        stack += ("stack is %s" % i.to_string())
-        stack += "\n"
-    return "".join(stack)
-
+def get_printable_location(self, w_exp):
+    # stack = []
+    # for i in stack_w:
+    #     stack += ("stack is %s" % i.to_string())
+    #     stack += "\n"
+    return w_exp.to_string()
 
 
 class Runtime(object):
     jitdriver = jit.JitDriver(
-        greens=[],
-        reds=["self", "env_stack"],
+        greens=["self", "w_exp"],
+        reds=["env_stack", "stack", "operand_stack"],
         get_printable_location=get_printable_location,
     )
 
@@ -122,11 +121,22 @@ class Runtime(object):
         operand_stack = w_list(w_exp)
         env_stack = w_list(env if env is not w_nil else self.global_env)
         while operand_stack is not w_nil:
-            self.jitdriver.jit_merge_point(
-                self=self, env_stack=env_stack,
-            )
             w_exp = operand_stack.car
+            if isinstance(w_exp, W_Fexpr):
+                self.jitdriver.can_enter_jit(
+                    self=self, w_exp=w_exp,
+                    env_stack=env_stack, stack=stack,
+                    operand_stack=operand_stack
+                )
+            self.jitdriver.jit_merge_point(
+                self=self, w_exp=w_exp,
+                env_stack=env_stack, stack=stack,
+                operand_stack=operand_stack
+            )
             env_stack, stack, operand_stack = w_exp.compile(self, env_stack, stack, operand_stack.cdr)
+            assert isinstance(env_stack, W_List)
+            assert isinstance(stack, W_List)
+            assert isinstance(operand_stack, W_List)
         return stack.car
 
     def execute(self, code):
