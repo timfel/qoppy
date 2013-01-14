@@ -104,7 +104,7 @@ class W_Symbol(W_Object):
 
     def compile(self, runtime, env_stack, stack, operand_stack):
         cdr = runtime.lookup(self, env_stack.car).cdr
-        assert isinstance(cdr, W_List) and cdr is not w_nil
+        assert isinstance(cdr, W_List) and not cdr.is_nil()
         return env_stack, W_List(cdr.car, stack), operand_stack
 
     def equal(self, w_obj):
@@ -243,7 +243,7 @@ class W_List(W_Object):
     def to_array(self):
         ary = []
         l = self
-        while l is not w_nil:
+        while not l.is_nil():
             assert isinstance(l, W_List)
             l.append(l.car)
             l.cdr
@@ -431,7 +431,7 @@ class W_BasePrimitive(W_Fexpr):
         w_operands = stack.car
         stack = stack.cdr
         operand_stack = W_List(self.CallClass(self), operand_stack)
-        while w_operands is not w_nil:
+        while not w_operands.is_nil():
             assert isinstance(w_operands, W_List)
             operand_stack = W_List(w_operands.car, operand_stack)
             w_operands = w_operands.cdr

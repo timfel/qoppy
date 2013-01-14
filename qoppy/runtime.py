@@ -88,9 +88,9 @@ class Runtime(object):
     def lookup(self, w_name, env):
         if env.is_nil() or not isinstance(env, W_List):
             raise QuoppaException("cannot find %s in %s" % (w_name.to_string(), env.to_string()))
-        while env is not w_nil:
+        while not env.is_nil():
             frame = env.car
-            while frame is not w_nil:
+            while not frame.is_nil():
                 if not isinstance(frame, W_List):
                     raise QuoppaException("Consistency! Non pair %s as frame" % frame.to_string())
                 pair = frame.car
@@ -123,8 +123,8 @@ class Runtime(object):
     def interpret(self, env, w_exp):
         stack = w_nil
         operand_stack = w_list([w_exp])
-        env_stack = w_list([env if env is not w_nil else self.global_env])
-        while operand_stack is not w_nil:
+        env_stack = w_list([self.global_env if env.is_nil() else env])
+        while not operand_stack.is_nil():
             w_exp = operand_stack.car
             if isinstance(w_exp, W_Fexpr):
                 self.jitdriver.can_enter_jit(

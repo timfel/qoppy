@@ -39,26 +39,26 @@ def cons(w_car, w_cdr):
     return W_List(w_car, w_cdr)
 
 def car(w_pair):
-    if isinstance(w_pair, W_List) and w_pair is not w_nil:
+    if isinstance(w_pair, W_List) and not w_pair.is_nil():
         return w_pair.car
     else:
         raise QuoppaException("wrong type argument %s for car" % w_pair.to_string())
 
 def cdr(w_pair):
-    if isinstance(w_pair, W_List) and w_pair is not w_nil:
+    if isinstance(w_pair, W_List) and not w_pair.is_nil():
         return w_pair.cdr
     else:
         raise QuoppaException("wrong type argument %s for cdr" % w_pair.to_string())
 
 def set_car_b(w_pair, w_val):
-    if isinstance(w_pair, W_List) and w_pair is not w_nil:
+    if isinstance(w_pair, W_List) and not w_pair.is_nil():
         w_pair.car = w_val
         return w_pair
     else:
         raise QuoppaException("wrong type argument %s for set-car!" % w_pair.to_string())
 
 def set_cdr_b(w_pair, w_val):
-    if isinstance(w_pair, W_List) and w_pair is not w_nil:
+    if isinstance(w_pair, W_List) and not w_pair.is_nil():
         w_pair.cdr = w_val
         return w_pair
     else:
