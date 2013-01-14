@@ -67,16 +67,16 @@ class Runtime(object):
         self.global_env = w_list([global_frame])
 
     def bind(self, param, val):
-        if param is w_nil and val is w_nil:
+        if param.is_nil() and val.is_nil():
             return w_nil
         elif isinstance(param, W_Symbol):
             if param is self.w_underscore:
                 return w_nil
             else:
                 return w_list([w_list([param, val])])
-        elif param is w_nil:
+        elif param.is_nil():
             raise QuoppaException("too many arguments")
-        elif val is w_nil:
+        elif val.is_nil():
             raise QuoppaException("too few arguments")
         elif isinstance(param, W_List) and isinstance(val, W_List):
             return self.bind(param.car, val.car).comma(self.bind(param.cdr, val.cdr))
@@ -86,7 +86,7 @@ class Runtime(object):
     # TODO: Probably wrong, look into this
     @jit.unroll_safe
     def lookup(self, w_name, env):
-        if env is w_nil or not isinstance(env, W_List):
+        if env.is_nil() or not isinstance(env, W_List):
             raise QuoppaException("cannot find %s in %s" % (w_name.to_string(), env.to_string()))
         while env is not w_nil:
             frame = env.car

@@ -31,6 +31,9 @@ class W_Object(object):
     def compile(self, runtime, env_stack, stack, operand_stack):
         return env_stack, W_List(self, stack), operand_stack
 
+    def is_nil(self):
+        return False
+
 
 class W_Undefined(W_Object):
     def to_repr(self):
@@ -230,7 +233,7 @@ class W_List(W_Object):
     def to_lstring(self):
         car = self.car.to_string()
         cdr = self.cdr
-        if cdr is w_nil:
+        if cdr.is_nil():
             return car
         elif isinstance(cdr, W_List): #still proper list
             return car + " " + cdr.to_lstring()
@@ -252,7 +255,7 @@ class W_List(W_Object):
     def to_lrepr(self):
         car = self.car.to_repr()
         cdr = self.cdr
-        if cdr is w_nil: #end of proper list
+        if cdr.is_nil(): #end of proper list
             return car
         elif isinstance(cdr, W_List): #still proper list
             return car + " " + cdr.to_lrepr()
@@ -268,13 +271,13 @@ class W_List(W_Object):
             self.cdr.equal(w_obj.cdr)
 
     def cons(self, w_pair):
-        if self.cdr is w_nil:
+        if self.cdr.is_nil():
             return W_List(self.car, w_pair)
         else:
             return W_List(self.car, self.cdr.cons(w_pair))
 
     def comma(self, w_pair):
-        if self.cdr is w_nil:
+        if self.cdr.is_nil():
             self.cdr = w_pair
             return self
         else:
@@ -318,6 +321,9 @@ class W_Nil(W_List):
 
     def compile(self, runtime, env_stack, stack, operand_stack):
         return env_stack, W_List(self, stack), operand_stack
+
+    def is_nil(self):
+        return True
 
 w_nil = W_Nil()
 

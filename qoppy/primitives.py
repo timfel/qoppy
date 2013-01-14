@@ -18,7 +18,7 @@ def eq_p(a, b):
         return w_false
 
 def null_p(w_obj):
-    if w_obj is w_nil:
+    if w_obj.is_nil():
         return w_true
     else:
         return w_false
