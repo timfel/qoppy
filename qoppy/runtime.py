@@ -81,6 +81,8 @@ class Runtime(object):
         else:
             raise QuoppaException("can't bind %s %s" % (param.to_string(), val.to_string()))
 
+    # TODO: Probably wrong, look into this
+    @jit.unroll_safe
     def lookup(self, name, env):
         if env is w_nil or not isinstance(env, W_List):
             raise QuoppaException("cannot find %s in %s" % (name.to_string(), env.to_string()))

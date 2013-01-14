@@ -1,3 +1,4 @@
+from pypy.rlib import jit
 from pypy.rlib.objectmodel import specialize
 
 class QuoppaException(Exception):
@@ -281,6 +282,7 @@ class W_List(W_Object):
         return env_stack, stack, w_list(self.car, W_Call(self.cdr)).comma(operand_stack)
 
 
+@jit.unroll_safe
 def w_list(first, *args):
     w_l = W_List(first, w_nil)
     for w_item in list(args):
@@ -418,6 +420,7 @@ class W_BasePrimitive(W_Fexpr):
         return "#<a primitive>"
     to_repr = to_string
 
+    @jit.unroll_safe
     def compile(self, runtime, env_stack, stack, operand_stack):
         argcount = 0
         w_operands = stack.car
