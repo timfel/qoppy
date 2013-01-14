@@ -416,10 +416,6 @@ class W_BasePrimitive(W_Fexpr):
     def __init__(self):
         self.arg_count = 0
 
-    def to_string(self):
-        return "#<a primitive>"
-    to_repr = to_string
-
     @jit.unroll_safe
     def compile(self, runtime, env_stack, stack, operand_stack):
         argcount = 0
@@ -463,6 +459,11 @@ class W_Primitive(W_BasePrimitive):
         exec source in namespace
         self.arg_count = arg_count
         self.fun = namespace[fun.__name__]
+        self.name = fun.__name__
+
+    def to_string(self):
+        return "#<primitive %s>" % self.name
+    to_repr = to_string
 
 
 class W_Vau(W_Primitive):
@@ -471,6 +472,10 @@ class W_Vau(W_Primitive):
         stack = stack.cdr
         return env_stack, W_List(self.fun([env_stack.car, w_operands]), stack), operand_stack
 
+    def to_string(self):
+        return "#<primitive vau>"
+    to_repr = to_string
+
 
 class W_Operate(W_BasePrimitive):
     CallClass = W_OperateCall
@@ -478,9 +483,17 @@ class W_Operate(W_BasePrimitive):
     def __init__(self):
         self.arg_count = 3
 
+    def to_string(self):
+        return "#<primitive operate>"
+    to_repr = to_string    
+
 
 class W_Eval(W_BasePrimitive):
     CallClass = W_EvalCall
 
     def __init__(self):
         self.arg_count = 2
+
+    def to_string(self):
+        return "#<primitive eval>"
+    to_repr = to_string    
