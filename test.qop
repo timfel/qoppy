@@ -45,7 +45,12 @@
 	   1
 	   (* (eval env n) (fact (- (eval env n) 1))))))
 
-(display (fact 5)) (display "\n")
+(define fact_tail (vau (n acc) env
+       (if (<= (eval env n) 1)
+	   (eval env acc)
+	   (fact_tail (- (eval env n) 1) (* (eval env n) (eval env acc))))))
+
+(display (fact_tail 2500 1)) (display "\n")
 
 (display "AND THAT WAS (fact 5) from QOPPA -> SCHEME -> QOPPA -> SCHEME")
 (display "\n")
