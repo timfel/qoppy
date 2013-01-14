@@ -104,6 +104,9 @@ class W_Symbol(W_Object):
         assert isinstance(cdr, W_List) and cdr is not w_nil
         return env_stack, W_List(cdr.car, stack), operand_stack
 
+    def equal(self, w_obj):
+        return self is w_obj
+
 
 def symbol(name):
     #use this to create new symbols, it stores all symbols
