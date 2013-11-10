@@ -1,4 +1,4 @@
-from pypy.rlib.objectmodel import specialize
+from rpython.rlib.objectmodel import specialize
 
 from execution_model import (W_List, symbol, w_nil, W_Symbol, QuoppaException,
                              W_Vau, W_Primitive, W_Fexpr, w_list)

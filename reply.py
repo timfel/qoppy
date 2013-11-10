@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 import sys, traceback, os
 
-from pypy.rlib.objectmodel import specialize
-from pypy.rlib.streamio import open_file_as_stream
-from pypy.rlib.parsing.makepackrat import BacktrackException
+from rpython.rlib.objectmodel import specialize
+from rpython.rlib.streamio import open_file_as_stream
+from rpython.rlib.parsing.makepackrat import BacktrackException
 
 from parser import parse
 from runtime import Runtime

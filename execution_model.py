@@ -1,4 +1,4 @@
-from pypy.rlib.objectmodel import specialize
+from rpython.rlib.objectmodel import specialize
 
 class QuoppaException(Exception):
     def __init__(self, msg=None):
@@ -96,7 +96,7 @@ class W_Symbol(W_Object):
 def symbol(name):
     #use this to create new symbols, it stores all symbols
     #in W_Symbol.obarray dict
-    #if already in obarray return it 
+    #if already in obarray return it
     name = name.lower()
     w_symb = W_Symbol.obarray.get(name, None)
     if w_symb is None:
@@ -180,9 +180,9 @@ w_eof = W_EofObject()
 
 class W_Stream(W_Object):
     def __init__(self, filename):
-        from pypy.rlib.streamio import open_file_as_stream
+        from rpython.rlib.streamio import open_file_as_stream
         self.filename = filename
-        self.contents = open_file_as_stream(filename).readall()
+        self.contents = open_file_as_stream(filename, buffering=0).readall()
         self.sexprs = None
         self.sexpr_pos = 0
 

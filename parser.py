@@ -1,5 +1,5 @@
-from pypy.rlib.parsing.pypackrat import PackratParser
-from pypy.rlib.parsing.makepackrat import BacktrackException, Status
+from rpython.rlib.parsing.pypackrat import PackratParser
+from rpython.rlib.parsing.makepackrat import BacktrackException, Status
 
 from execution_model import (W_List, W_Integer, W_Real, W_String, w_nil,
                              symbol, w_true, w_false, QuoppaException)
@@ -65,27 +65,27 @@ class QuoppaParser(PackratParser):
 
     IGNORE:
         ` |\n|\t|;[^\n]*`;
-    
+
     EOF:
         !__any__;
-    
+
     file:
         IGNORE*
         s = sexpr*
         EOF
         return {s};
-    
+
     quote:
        `'`
        s = sexpr
        return {quote(s)};
-    
+
     qq:
        `\``
        s = sexpr
        return {qq(s)};
-       
-       
+
+
     unquote_splicing:
        `\,@`
        s = sexpr
@@ -95,7 +95,7 @@ class QuoppaParser(PackratParser):
        `\,`
        s = sexpr
        return {unquote(s)};
-    
+
     sexpr:
         list
       | quote
@@ -131,8 +131,7 @@ class QuoppaParser(PackratParser):
     """
 
 def parse(code):
-    p = QuoppaParser()
-    p.init_parser(code)
+    p = QuoppaParser(code)
     return p.file()
 
 ##
