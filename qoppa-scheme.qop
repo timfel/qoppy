@@ -147,7 +147,18 @@
 	    (loop)))))
         (loop))
 
-(execute-stream (open-input-file "qoppa.scm"))
+;; (execute-stream (open-input-file "qoppa.scm"))
+
+(define (fact n) (fact_tr n 0))
+(define (fact_tr n memo)
+  (if (<= n 1)
+      memo
+      (fact_tr (- n 1) (+ n memo))))
+
+(display "FACT: ")
+(display (fact 15))
+(display "\n")
+
 
 ;; ; vim: ft=scheme
 ;; Local Variables:
