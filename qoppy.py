@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys, traceback, os
 
+from rpython.jit.codewriter.policy import JitPolicy
 from rpython.rlib.objectmodel import specialize
 from rpython.rlib.streamio import open_file_as_stream
 from rpython.rlib.parsing.makepackrat import BacktrackException
@@ -67,6 +68,9 @@ def entry_point(argv):
 def target(driver, *args):
     driver.exe_name = 'qoppy-%(backend)s'
     return entry_point, None
+
+def jitpolicy(driver):
+    return JitPolicy()
 
 if __name__ == "__main__":
     entry_point(sys.argv)

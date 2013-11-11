@@ -1,9 +1,21 @@
+from rpython.rlib import jit
 from rpython.rlib.objectmodel import specialize
 
 from execution_model import (W_List, symbol, w_nil, W_Symbol, QuoppaException,
                              W_Vau, W_Primitive, W_Fexpr, w_list)
 
+
+def get_printable_location(self, exp):
+    return exp.to_string()
+
+
 class Runtime(object):
+    jitdriver = jit.JitDriver(
+        greens=['self', 'fexpr'],
+        reds=['operands', 'env'],
+        get_printable_location=get_printable_location
+    )
+
     @specialize.memo()
     def __init__(self, primitives):
         vau = W_Vau(self.vau)
@@ -70,6 +82,7 @@ class Runtime(object):
             return exp
 
     def operate(self, env, fexpr, operands):
+        self.jitdriver.jit_merge_point(env=env, fexpr=fexpr, self=self, operands=operands)
         return fexpr.call(self, env, operands)
 
     def vau(self, static_env, vau_operands):
