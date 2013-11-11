@@ -284,13 +284,14 @@ w_nil = W_Nil()
 
 class W_Fexpr(W_Object):
     def __init__(self, env_param, params, static_env, body):
+        self.name = None
         self.env_param = env_param
         self.params = params
         self.static_env = static_env
         self.body = body
 
     def to_string(self):
-        return '#<an fexpr>'
+        return '#<fexpr %s>' % (self.name or "#anyonymous")
 
     to_repr = to_string
 
@@ -324,9 +325,10 @@ class W_Primitive(W_Fexpr):
         namespace = {"func": fun}
         exec source in namespace
         self.fun = namespace[fun.__name__]
+        self.name = fun.__name__
 
     def to_string(self):
-        return "#<a primitive>"
+        return "#<primitive %s>" % self.name
 
     to_repr = to_string
 
@@ -341,3 +343,6 @@ class W_Primitive(W_Fexpr):
 class W_Vau(W_Primitive):
     def call(self, runtime, env, operands):
         return self.fun([env, operands])
+
+    def to_string(self):
+        return "#<vau>"

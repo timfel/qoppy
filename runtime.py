@@ -23,6 +23,9 @@ class Runtime(object):
             if param.name == "_":
                 return w_nil
             else:
+                # For debugging
+                if isinstance(val, W_Fexpr) and not val.name:
+                    val.name = param.name
                 return w_list(w_list(param, val))
         elif param is w_nil:
             raise QuoppaException("too many arguments")
