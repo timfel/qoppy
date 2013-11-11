@@ -1,0 +1,725 @@
+[145dc3c0eaa] {jit-log-opt-loop
+# Loop 0 (#<primitive m_eval>) : entry bridge with 47 ops
+[p0, p1]
+debug_merge_point(0, 0, '#<primitive m_eval>')
++61: i3 = instance_ptr_eq(p0, ConstPtr(ptr2))
+guard_false(i3, descr=<Guard0x1430c90>) [p1, p0]
++77: p4 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_car 8>)
++86: i6 = instance_ptr_eq(p1, ConstPtr(ptr5))
+guard_false(i6, descr=<Guard0x14481d0>) [p0, p1, p4]
++102: guard_nonnull_class(p4, 18811956, descr=<Guard0x1448190>) [p0, p1, p4]
++120: guard_nonnull_class(p1, 18811860, descr=<Guard0x1448150>) [p0, p1, p4]
++144: p9 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++147: p11 = call(ConstClass(W_Frame._get_pure), p1, p4, p9, descr=<Callr 4 rrr EF=3>)
++209: guard_no_exception(descr=<Guard0x1448110>) [p0, p1, p11, p4]
++222: guard_nonnull(p11, descr=<Guard0x14480d0>) [p0, p1, p11, p4]
++230: p12 = getfield_gc(p11, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++233: p13 = getfield_gc(p12, descr=<FieldP execution_model.W_List.inst_car 8>)
++236: p14 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++245: i16 = instance_ptr_eq(p14, ConstPtr(ptr15))
+guard_false(i16, descr=<Guard0x1448090>) [p14, p1, p13]
++257: p17 = getfield_gc(p14, descr=<FieldP execution_model.W_List.inst_car 8>)
++260: guard_nonnull_class(p17, 18811908, descr=<Guard0x1448050>) [p14, p1, p17, p13]
++278: p19 = getfield_gc(p17, descr=<FieldP execution_model.W_List.inst_car 8>)
++281: guard_nonnull_class(p19, 18811956, descr=<Guard0x1448010>) [p14, p1, p17, p19, p13]
++299: p22 = call(ConstClass(W_Frame._get_pure), p1, p19, p9, descr=<Callr 4 rrr EF=3>)
++385: guard_no_exception(descr=<Guard0x1430f90>) [p14, p1, p17, p22, p19, p13]
++398: guard_nonnull(p22, descr=<Guard0x1430f50>) [p14, p1, p17, p22, p19, p13]
++406: p23 = getfield_gc(p22, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++409: p24 = getfield_gc(p23, descr=<FieldP execution_model.W_List.inst_car 8>)
++412: p25 = getfield_gc(p17, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++421: guard_value(p24, ConstPtr(ptr26), descr=<Guard0x1430f10>) [p14, p1, p25, p24, p13]
+debug_merge_point(1, 1, '#<primitive cons>')
+p27 = call_assembler(p25, p1, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x1430ed0>) [p14, p1, p27, p13]
++638: guard_no_exception(descr=<Guard0x1430e90>) [p14, p1, p27, p13]
++651: guard_no_exception(descr=<Guard0x1430e50>) [p27, p14, p1, p13]
++664: p28 = getfield_gc(p14, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++673: i30 = instance_ptr_eq(p28, ConstPtr(ptr29))
+guard_true(i30, descr=<Guard0x1430e10>) [p28, p1, p27, p13]
++685: i32 = instance_ptr_eq(p13, ConstPtr(ptr31))
+guard_false(i32, descr=<Guard0x1430dd0>) [p27, p13, None, None]
++701: guard_nonnull_class(p27, 18811908, descr=<Guard0x1430d90>) [p27, p13, None, None]
++719: p35 = getfield_gc(p27, descr=<FieldP execution_model.W_List.inst_car 8>)
++722: guard_value(p35, ConstPtr(ptr36), descr=<Guard0x1430d50>) [p27, p13, p35, None, None]
++734: p37 = getfield_gc(p27, descr=<FieldP execution_model.W_List.inst_cdr 12>)
+debug_merge_point(1, 2, '#<fexpr #anyonymous>')
+p38 = call_assembler(p37, p13, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x1430d10>) [p38, None, None]
++954: guard_no_exception(descr=<Guard0x1430cd0>) [p38, None, None]
++967: finish(p38, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++1013: --end of the loop--
+[145dc3c127d] jit-log-opt-loop}
+[145dc3c425b] {jit-log-opt-bridge
+# bridge out of Guard 0x1448050 with 33 ops
+[p0, p1, p2, p3]
++29: guard_nonnull_class(p2, 18811956, descr=<Guard0x1448290>) [p0, p1, p2, p3]
++47: i6 = instance_ptr_eq(p1, ConstPtr(ptr5))
+guard_false(i6, descr=<Guard0x1448e90>) [p0, p1, p2, p3]
++63: guard_nonnull_class(p1, 18811860, descr=<Guard0x1448e50>) [p0, p1, p2, p3]
++87: p8 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++90: p10 = call(ConstClass(W_Frame._get_pure), p1, p2, p8, descr=<Callr 4 rrr EF=3>)
++158: guard_no_exception(descr=<Guard0x1448e10>) [p0, p1, p10, p2, p3]
++171: guard_nonnull(p10, descr=<Guard0x1448dd0>) [p0, p1, p10, p2, p3]
++179: p11 = getfield_gc(p10, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++182: p12 = getfield_gc(p11, descr=<FieldP execution_model.W_List.inst_car 8>)
++185: guard_no_exception(descr=<Guard0x1448d90>) [p12, p0, p1, p3]
++198: p13 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++207: i15 = instance_ptr_eq(p13, ConstPtr(ptr14))
+guard_true(i15, descr=<Guard0x1448d50>) [p13, p1, p12, p3]
++219: i17 = instance_ptr_eq(p3, ConstPtr(ptr16))
+guard_false(i17, descr=<Guard0x1448d10>) [p12, p3, None, None]
++235: guard_nonnull_class(p12, 18811908, descr=<Guard0x1448cd0>) [p12, p3, None, None]
++253: p20 = getfield_gc(p12, descr=<FieldP execution_model.W_List.inst_car 8>)
++256: guard_nonnull_class(p20, 18811956, descr=<Guard0x1448c90>) [p12, p3, p20, None, None]
++274: guard_nonnull_class(p3, 18811860, descr=<Guard0x1448c50>) [p12, p3, p20, None, None]
++298: p23 = getfield_gc(p3, descr=<FieldP frame.W_Frame.inst__version 36>)
++301: p25 = call(ConstClass(W_Frame._get_pure), p3, p20, p23, descr=<Callr 4 rrr EF=3>)
++363: guard_no_exception(descr=<Guard0x1448c10>) [p12, p3, p25, p20, None, None]
++376: guard_nonnull(p25, descr=<Guard0x1448bd0>) [p12, p3, p25, p20, None, None]
++384: p26 = getfield_gc(p25, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++387: p27 = getfield_gc(p26, descr=<FieldP execution_model.W_List.inst_car 8>)
++390: p28 = getfield_gc(p12, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++399: guard_value(p27, ConstPtr(ptr29), descr=<Guard0x1448b90>) [p28, p27, p3, None, None]
+debug_merge_point(1, 1, '#<primitive null_p>')
+p30 = call_assembler(p28, p3, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x1448b50>) [p30, None, None]
++616: guard_no_exception(descr=<Guard0x1448b10>) [p30, None, None]
++629: finish(p30, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++675: --end of the loop--
+[145dc3c46eb] jit-log-opt-bridge}
+[145dc3c5850] {jit-log-opt-loop
+# Loop 1 (#<primitive cons>) : entry bridge with 40 ops
+[p0, p1]
+debug_merge_point(0, 0, '#<primitive cons>')
++61: i3 = instance_ptr_eq(p0, ConstPtr(ptr2))
+guard_false(i3, descr=<Guard0x1448ed0>) [p1, p0]
++77: p4 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_car 8>)
++86: i6 = instance_ptr_eq(p1, ConstPtr(ptr5))
+guard_false(i6, descr=<Guard0x145bcd0>) [p0, p1, p4]
++102: guard_nonnull_class(p4, 18811956, descr=<Guard0x145bc90>) [p0, p1, p4]
++120: guard_nonnull_class(p1, 18811860, descr=<Guard0x145bc50>) [p0, p1, p4]
++144: p9 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++147: p11 = call(ConstClass(W_Frame._get_pure), p1, p4, p9, descr=<Callr 4 rrr EF=3>)
++209: guard_no_exception(descr=<Guard0x145bc10>) [p0, p1, p11, p4]
++222: guard_nonnull(p11, descr=<Guard0x145bbd0>) [p0, p1, p11, p4]
++230: p12 = getfield_gc(p11, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++233: p13 = getfield_gc(p12, descr=<FieldP execution_model.W_List.inst_car 8>)
++236: p14 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++245: i16 = instance_ptr_eq(p14, ConstPtr(ptr15))
+guard_false(i16, descr=<Guard0x145bb90>) [p14, p1, p13]
++257: p17 = getfield_gc(p14, descr=<FieldP execution_model.W_List.inst_car 8>)
++260: guard_nonnull_class(p17, 18811908, descr=<Guard0x145bb50>) [p14, p1, p17, p13]
++278: p19 = getfield_gc(p17, descr=<FieldP execution_model.W_List.inst_car 8>)
++281: guard_nonnull_class(p19, 18811956, descr=<Guard0x145bb10>) [p14, p1, p17, p19, p13]
++299: p22 = call(ConstClass(W_Frame._get_pure), p1, p19, p9, descr=<Callr 4 rrr EF=3>)
++385: guard_no_exception(descr=<Guard0x145bad0>) [p14, p1, p17, p22, p19, p13]
++398: guard_nonnull(p22, descr=<Guard0x145ba90>) [p14, p1, p17, p22, p19, p13]
++406: p23 = getfield_gc(p22, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++409: p24 = getfield_gc(p23, descr=<FieldP execution_model.W_List.inst_car 8>)
++412: p25 = getfield_gc(p17, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++421: guard_value(p24, ConstPtr(ptr26), descr=<Guard0x145ba50>) [p14, p1, p25, p24, p13]
+debug_merge_point(1, 1, '#<primitive cdr>')
+p27 = call_assembler(p25, p1, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x145ba10>) [p14, p1, p27, p13]
++638: guard_no_exception(descr=<Guard0x145b9d0>) [p14, p1, p27, p13]
++651: guard_no_exception(descr=<Guard0x145b990>) [p27, p14, p1, p13]
++664: p28 = getfield_gc(p14, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++673: i30 = instance_ptr_eq(p28, ConstPtr(ptr29))
+guard_true(i30, descr=<Guard0x145b950>) [p28, p1, p27, p13]
+p32 = new_with_vtable(18811908)
++739: setfield_gc(p32, p13, descr=<FieldP execution_model.W_List.inst_car 8>)
++748: setfield_gc(p32, p27, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++757: finish(p32, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++803: --end of the loop--
+[145dc3c5b72] jit-log-opt-loop}
+[145dc3cac3a] {jit-log-opt-bridge
+# bridge out of Guard 0x145bc90 with 68 ops
+[p0, p1, p2]
++29: guard_nonnull_class(p2, 18811908, descr=<Guard0x14dd390>) [p0, p1, p2]
++47: p4 = getfield_gc(p2, descr=<FieldP execution_model.W_List.inst_car 8>)
++50: i6 = instance_ptr_eq(p1, ConstPtr(ptr5))
+guard_false(i6, descr=<Guard0x14f4490>) [p0, p1, p2, p4]
++66: guard_nonnull_class(p4, 18811956, descr=<Guard0x14f4450>) [p0, p1, p2, p4]
++84: guard_nonnull_class(p1, 18811860, descr=<Guard0x14f4410>) [p0, p1, p2, p4]
++108: p9 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++111: p11 = call(ConstClass(W_Frame._get_pure), p1, p4, p9, descr=<Callr 4 rrr EF=3>)
++179: guard_no_exception(descr=<Guard0x14f43d0>) [p0, p1, p2, p11, p4]
++192: guard_nonnull(p11, descr=<Guard0x14f4390>) [p0, p1, p2, p11, p4]
++200: p12 = getfield_gc(p11, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++203: p13 = getfield_gc(p12, descr=<FieldP execution_model.W_List.inst_car 8>)
++206: p14 = getfield_gc(p2, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++215: guard_value(p13, ConstPtr(ptr15), descr=<Guard0x14f4350>) [p0, p1, p14, p13]
+debug_merge_point(1, 1, '#<primitive m_eval>')
+p16 = call_assembler(p14, p1, descr=<Loop0>)
+guard_not_forced(descr=<Guard0x14f4310>) [p0, p1, p16]
++432: guard_no_exception(descr=<Guard0x14f42d0>) [p0, p1, p16]
+p17 = new(descr=<SizeDescr 12>)
+p19 = new_array(0, descr=<ArrayP 4>)
++508: setfield_gc(p17, p19, descr=<FieldP list.items 8>)
++511: call(ConstClass(_ll_list_resize_hint_really_look_inside_iff__listPtr_Signed_Bool), p17, 1, 1, descr=<Callv 0 rii EF=4>)
++575: guard_no_exception(descr=<Guard0x14f4290>) [p17, p16, p0, p1]
++588: p23 = getfield_gc(p17, descr=<FieldP list.items 8>)
++597: p24 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++606: setfield_gc(p17, 1, descr=<FieldS list.length 4>)
++633: setarrayitem_gc(p23, 0, p16, descr=<ArrayP 4>)
++642: i27 = instance_ptr_eq(p24, ConstPtr(ptr26))
+guard_false(i27, descr=<Guard0x14f4250>) [p17, p24, p1]
++654: p28 = getfield_gc(p24, descr=<FieldP execution_model.W_List.inst_car 8>)
++657: guard_nonnull_class(p28, 18811908, descr=<Guard0x14f4210>) [p17, p24, p1, p28]
++675: p30 = getfield_gc(p28, descr=<FieldP execution_model.W_List.inst_car 8>)
++678: guard_nonnull_class(p30, 18811956, descr=<Guard0x14f41d0>) [p17, p24, p1, p28, p30]
++696: p32 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++705: p34 = call(ConstClass(W_Frame._get_pure), p1, p30, p32, descr=<Callr 4 rrr EF=3>)
++773: guard_no_exception(descr=<Guard0x14f4190>) [p17, p24, p1, p28, p34, p30]
++786: guard_nonnull(p34, descr=<Guard0x14f4150>) [p17, p24, p1, p28, p34, p30]
++794: p35 = getfield_gc(p34, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++797: p36 = getfield_gc(p35, descr=<FieldP execution_model.W_List.inst_car 8>)
++800: p37 = getfield_gc(p28, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++809: guard_value(p36, ConstPtr(ptr38), descr=<Guard0x14f4110>) [p17, p24, p1, p37, p36]
+debug_merge_point(1, 2, '#<primitive m_eval>')
+p39 = call_assembler(p37, p1, descr=<Loop0>)
+guard_not_forced(descr=<Guard0x14f40d0>) [p17, p24, p1, p39]
++1038: guard_no_exception(descr=<Guard0x14f4090>) [p17, p24, p1, p39]
++1051: i40 = getfield_gc(p17, descr=<FieldS list.length 4>)
++1060: i42 = int_add(i40, 1)
++1063: p43 = getfield_gc(p17, descr=<FieldP list.items 8>)
++1066: i44 = arraylen_gc(p43, descr=<ArrayP 4>)
++1069: i45 = int_lt(i44, i42)
++1077: cond_call(i45, ConstClass(_ll_list_resize_hint_really_look_inside_iff__listPtr_Signed_Bool), p17, i42, 1, descr=<Callv 0 rii EF=4>)
++1117: guard_no_exception(descr=<Guard0x14f4050>) [p17, i40, p39, p24, p1, i42]
++1130: p48 = getfield_gc(p17, descr=<FieldP list.items 8>)
++1160: setarrayitem_gc(p48, i40, p39, descr=<ArrayP 4>)
++1164: p49 = getfield_gc(p24, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++1173: setfield_gc(p17, i42, descr=<FieldS list.length 4>)
++1176: i51 = instance_ptr_eq(p49, ConstPtr(ptr50))
+guard_true(i51, descr=<Guard0x14f4010>) [p17, p49, p1]
++1188: i53 = int_gt(i42, 0)
+guard_true(i53, descr=<Guard0x14ddf90>) [p17]
++1197: p55 = getarrayitem_gc(p48, 0, descr=<ArrayP 4>)
++1200: i57 = int_gt(i42, 1)
+guard_true(i57, descr=<Guard0x14ddf50>) [p55, p17]
++1209: p59 = getarrayitem_gc(p48, 1, descr=<ArrayP 4>)
+p61 = new_with_vtable(18811908)
++1260: setfield_gc(p61, p55, descr=<FieldP execution_model.W_List.inst_car 8>)
++1263: setfield_gc(p61, p59, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++1266: finish(p61, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++1312: --end of the loop--
+[145dc3cb032] jit-log-opt-bridge}
+[145dc3cc932] {jit-log-opt-loop
+# Loop 2 (#<primitive m_bool>) : entry bridge with 72 ops
+[p0, p1]
+debug_merge_point(0, 0, '#<primitive m_bool>')
++61: i3 = instance_ptr_eq(p0, ConstPtr(ptr2))
+guard_false(i3, descr=<Guard0x14f44d0>) [p1, p0]
++77: p4 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_car 8>)
++86: i6 = instance_ptr_eq(p1, ConstPtr(ptr5))
+guard_false(i6, descr=<Guard0x14ff7d0>) [p0, p1, p4]
++102: guard_nonnull_class(p4, 18811908, descr=<Guard0x14ff790>) [p0, p1, p4]
++120: p8 = getfield_gc(p4, descr=<FieldP execution_model.W_List.inst_car 8>)
++123: guard_nonnull_class(p8, 18811956, descr=<Guard0x14ff750>) [p0, p1, p4, p8]
++141: guard_nonnull_class(p1, 18811860, descr=<Guard0x14ff710>) [p0, p1, p4, p8]
++165: p11 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++168: p13 = call(ConstClass(W_Frame._get_pure), p1, p8, p11, descr=<Callr 4 rrr EF=3>)
++230: guard_no_exception(descr=<Guard0x14ff6d0>) [p0, p1, p4, p13, p8]
++243: guard_nonnull(p13, descr=<Guard0x14ff690>) [p0, p1, p4, p13, p8]
++251: p14 = getfield_gc(p13, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++254: p15 = getfield_gc(p14, descr=<FieldP execution_model.W_List.inst_car 8>)
++257: p16 = getfield_gc(p4, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++266: guard_value(p15, ConstPtr(ptr17), descr=<Guard0x14ff650>) [p0, p1, p16, p15]
+debug_merge_point(1, 1, '#<primitive m_eval>')
+p18 = call_assembler(p16, p1, descr=<Loop0>)
+guard_not_forced(descr=<Guard0x14ff610>) [p0, p1, p18]
++483: guard_no_exception(descr=<Guard0x14ff5d0>) [p0, p1, p18]
+p19 = new(descr=<SizeDescr 12>)
+p21 = new_array(0, descr=<ArrayP 4>)
++559: setfield_gc(p19, p21, descr=<FieldP list.items 8>)
++562: call(ConstClass(_ll_list_resize_hint_really_look_inside_iff__listPtr_Signed_Bool), p19, 1, 1, descr=<Callv 0 rii EF=4>)
++626: guard_no_exception(descr=<Guard0x14ff590>) [p19, p18, p0, p1]
++639: p25 = getfield_gc(p19, descr=<FieldP list.items 8>)
++648: p26 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++657: setfield_gc(p19, 1, descr=<FieldS list.length 4>)
++684: setarrayitem_gc(p25, 0, p18, descr=<ArrayP 4>)
++693: i29 = instance_ptr_eq(p26, ConstPtr(ptr28))
+guard_false(i29, descr=<Guard0x14ff550>) [p19, p26, p1]
++705: p30 = getfield_gc(p26, descr=<FieldP execution_model.W_List.inst_car 8>)
++708: guard_nonnull_class(p30, 18811956, descr=<Guard0x14ff510>) [p19, p26, p1, p30]
++726: p32 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++735: p34 = call(ConstClass(W_Frame._get_pure), p1, p30, p32, descr=<Callr 4 rrr EF=3>)
++809: guard_no_exception(descr=<Guard0x14ff4d0>) [p19, p26, p1, p34, p30]
++822: guard_nonnull(p34, descr=<Guard0x14ff490>) [p19, p26, p1, p34, p30]
++830: p35 = getfield_gc(p34, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++833: p36 = getfield_gc(p35, descr=<FieldP execution_model.W_List.inst_car 8>)
++836: i37 = arraylen_gc(p25, descr=<ArrayP 4>)
++845: i39 = int_lt(i37, 2)
++854: cond_call(i39, ConstClass(_ll_list_resize_hint_really_look_inside_iff__listPtr_Signed_Bool), p19, 2, 1, descr=<Callv 0 rii EF=4>)
++894: guard_no_exception(descr=<Guard0x14ff450>) [p19, p36, p26, p1]
++907: p42 = getfield_gc(p19, descr=<FieldP list.items 8>)
++916: p43 = getfield_gc(p26, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++925: setfield_gc(p19, 2, descr=<FieldS list.length 4>)
++952: setarrayitem_gc(p42, 1, p36, descr=<ArrayP 4>)
++955: i45 = instance_ptr_eq(p43, ConstPtr(ptr44))
+guard_false(i45, descr=<Guard0x14ff410>) [p19, p43, p1]
++967: p46 = getfield_gc(p43, descr=<FieldP execution_model.W_List.inst_car 8>)
++970: guard_nonnull_class(p46, 18811956, descr=<Guard0x14ff3d0>) [p19, p43, p1, p46]
++988: p49 = call(ConstClass(W_Frame._get_pure), p1, p46, p32, descr=<Callr 4 rrr EF=3>)
++1068: guard_no_exception(descr=<Guard0x14ff390>) [p19, p43, p1, p49, p46]
++1081: guard_nonnull(p49, descr=<Guard0x14ff350>) [p19, p43, p1, p49, p46]
++1089: p50 = getfield_gc(p49, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++1092: p51 = getfield_gc(p50, descr=<FieldP execution_model.W_List.inst_car 8>)
++1095: i52 = arraylen_gc(p42, descr=<ArrayP 4>)
++1104: i54 = int_lt(i52, 3)
++1113: cond_call(i54, ConstClass(_ll_list_resize_hint_really_look_inside_iff__listPtr_Signed_Bool), p19, 3, 1, descr=<Callv 0 rii EF=4>)
++1153: guard_no_exception(descr=<Guard0x14ff310>) [p19, p51, p43, p1]
++1166: p57 = getfield_gc(p19, descr=<FieldP list.items 8>)
++1175: p58 = getfield_gc(p43, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++1184: setfield_gc(p19, 3, descr=<FieldS list.length 4>)
++1211: setarrayitem_gc(p57, 2, p51, descr=<ArrayP 4>)
++1214: i60 = instance_ptr_eq(p58, ConstPtr(ptr59))
+guard_true(i60, descr=<Guard0x14ff2d0>) [p19, p58, p1]
++1226: p62 = getarrayitem_gc(p57, 0, descr=<ArrayP 4>)
++1229: p64 = getarrayitem_gc(p57, 1, descr=<ArrayP 4>)
++1232: guard_class(p62, 18820944, descr=<Guard0x14ff290>) [p64, p62, p51]
++1245: finish(p51, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++1291: --end of the loop--
+[145dc3ccdd8] jit-log-opt-loop}
+[145dc3ce3a2] {jit-log-opt-loop
+# Loop 3 (#<primitive null_p>) : entry bridge with 20 ops
+[p0, p1]
+debug_merge_point(0, 0, '#<primitive null_p>')
++61: i3 = instance_ptr_eq(p0, ConstPtr(ptr2))
+guard_false(i3, descr=<Guard0x14ff810>) [p1, p0]
++77: p4 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_car 8>)
++86: i6 = instance_ptr_eq(p1, ConstPtr(ptr5))
+guard_false(i6, descr=<Guard0x14ffdd0>) [p0, p1, p4]
++102: guard_nonnull_class(p4, 18811956, descr=<Guard0x14ffd90>) [p0, p1, p4]
++120: guard_nonnull_class(p1, 18811860, descr=<Guard0x14ffd50>) [p0, p1, p4]
++144: p9 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++147: p11 = call(ConstClass(W_Frame._get_pure), p1, p4, p9, descr=<Callr 4 rrr EF=3>)
++203: guard_no_exception(descr=<Guard0x14ffd10>) [p0, p1, p11, p4]
++216: guard_nonnull(p11, descr=<Guard0x14ffcd0>) [p0, p1, p11, p4]
++224: p12 = getfield_gc(p11, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++227: p13 = getfield_gc(p12, descr=<FieldP execution_model.W_List.inst_car 8>)
++230: p14 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++239: i16 = instance_ptr_eq(p14, ConstPtr(ptr15))
+guard_true(i16, descr=<Guard0x14ffc90>) [p14, p1, p13]
++251: i18 = instance_ptr_eq(p13, ConstPtr(ptr17))
+guard_false(i18, descr=<Guard0x14ffc50>) [None]
++263: finish(ConstPtr(ptr20), descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++313: --end of the loop--
+[145dc3ce4bf] jit-log-opt-loop}
+[145dc3d12e4] {jit-log-opt-loop
+# Loop 4 (#<primitive car>) : entry bridge with 20 ops
+[p0, p1]
+debug_merge_point(0, 0, '#<primitive car>')
++61: i3 = instance_ptr_eq(p0, ConstPtr(ptr2))
+guard_false(i3, descr=<Guard0x1518190>) [p1, p0]
++77: p4 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_car 8>)
++86: i6 = instance_ptr_eq(p1, ConstPtr(ptr5))
+guard_false(i6, descr=<Guard0x1518350>) [p0, p1, p4]
++102: guard_nonnull_class(p4, 18811956, descr=<Guard0x1518310>) [p0, p1, p4]
++120: guard_nonnull_class(p1, 18811860, descr=<Guard0x15182d0>) [p0, p1, p4]
++144: p9 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++147: p11 = call(ConstClass(W_Frame._get_pure), p1, p4, p9, descr=<Callr 4 rrr EF=3>)
++203: guard_no_exception(descr=<Guard0x1518290>) [p0, p1, p11, p4]
++216: guard_nonnull(p11, descr=<Guard0x1518250>) [p0, p1, p11, p4]
++224: p12 = getfield_gc(p11, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++227: p13 = getfield_gc(p12, descr=<FieldP execution_model.W_List.inst_car 8>)
++230: p14 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++239: i16 = instance_ptr_eq(p14, ConstPtr(ptr15))
+guard_true(i16, descr=<Guard0x1518210>) [p14, p1, p13]
++251: guard_nonnull_class(p13, 18811908, descr=<Guard0x15181d0>) [p13, None]
++269: p19 = getfield_gc(p13, descr=<FieldP execution_model.W_List.inst_car 8>)
++272: finish(p19, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++318: --end of the loop--
+[145dc3d14ae] jit-log-opt-loop}
+[145dc3d3225] {jit-log-opt-loop
+# Loop 5 (#<primitive cdr>) : entry bridge with 20 ops
+[p0, p1]
+debug_merge_point(0, 0, '#<primitive cdr>')
++61: i3 = instance_ptr_eq(p0, ConstPtr(ptr2))
+guard_false(i3, descr=<Guard0x1518510>) [p1, p0]
++77: p4 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_car 8>)
++86: i6 = instance_ptr_eq(p1, ConstPtr(ptr5))
+guard_false(i6, descr=<Guard0x1518b90>) [p0, p1, p4]
++102: guard_nonnull_class(p4, 18811956, descr=<Guard0x1518b50>) [p0, p1, p4]
++120: guard_nonnull_class(p1, 18811860, descr=<Guard0x1518b10>) [p0, p1, p4]
++144: p9 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++147: p11 = call(ConstClass(W_Frame._get_pure), p1, p4, p9, descr=<Callr 4 rrr EF=3>)
++203: guard_no_exception(descr=<Guard0x1518ad0>) [p0, p1, p11, p4]
++216: guard_nonnull(p11, descr=<Guard0x1518a90>) [p0, p1, p11, p4]
++224: p12 = getfield_gc(p11, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++227: p13 = getfield_gc(p12, descr=<FieldP execution_model.W_List.inst_car 8>)
++230: p14 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++239: i16 = instance_ptr_eq(p14, ConstPtr(ptr15))
+guard_true(i16, descr=<Guard0x1518a50>) [p14, p1, p13]
++251: guard_nonnull_class(p13, 18811908, descr=<Guard0x1518a10>) [p13, None]
++269: p19 = getfield_gc(p13, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++272: finish(p19, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++318: --end of the loop--
+[145dc3d333d] jit-log-opt-loop}
+[145dc3db400] {jit-log-opt-bridge
+# bridge out of Guard 0x14ff290 with 2 ops
+[p0, p1, p2]
++29: guard_class(p1, 18820996, descr=<Guard0x172d310>) [p0, p1, p2]
++42: finish(p0, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++88: --end of the loop--
+[145dc3db45b] jit-log-opt-bridge}
+[145dc3dbd0a] {jit-log-opt-bridge
+# bridge out of Guard 0x14ffc50 with 1 ops
+[]
++29: finish(ConstPtr(ptr0), descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++79: --end of the loop--
+[145dc3dbd40] jit-log-opt-bridge}
+[145dc3df48e] {jit-log-opt-bridge
+# bridge out of Guard 0x1448b90 with 6 ops
+[p0, p1, p2]
++29: guard_value(p1, ConstPtr(ptr3), descr=<Guard0x18188d0>) [p0, p1, p2]
+debug_merge_point(1, 1, '#<primitive m_eval>')
+p4 = call_assembler(p0, p2, descr=<Loop0>)
+guard_not_forced(descr=<Guard0x1818a10>) [p4]
++246: guard_no_exception(descr=<Guard0x18189d0>) [p4]
++259: finish(p4, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++305: --end of the loop--
+[145dc3df503] jit-log-opt-bridge}
+[145dc3eedb1] {jit-log-opt-loop
+# Loop 6 (#<primitive operate>) : entry bridge with 62 ops
+[p0, p1]
+debug_merge_point(0, 0, '#<primitive operate>')
++61: i3 = instance_ptr_eq(p0, ConstPtr(ptr2))
+guard_false(i3, descr=<Guard0x19549d0>) [p1, p0]
++77: p4 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_car 8>)
++86: i6 = instance_ptr_eq(p1, ConstPtr(ptr5))
+guard_false(i6, descr=<Guard0x195d0d0>) [p0, p1, p4]
++102: guard_nonnull_class(p4, 18811956, descr=<Guard0x195d090>) [p0, p1, p4]
++120: guard_nonnull_class(p1, 18811860, descr=<Guard0x195d050>) [p0, p1, p4]
++144: p9 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++147: p11 = call(ConstClass(W_Frame._get_pure), p1, p4, p9, descr=<Callr 4 rrr EF=3>)
++209: guard_no_exception(descr=<Guard0x195d010>) [p0, p1, p11, p4]
++222: guard_nonnull(p11, descr=<Guard0x1954f90>) [p0, p1, p11, p4]
++230: p12 = getfield_gc(p11, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++233: p13 = getfield_gc(p12, descr=<FieldP execution_model.W_List.inst_car 8>)
++236: p14 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++245: i16 = instance_ptr_eq(p14, ConstPtr(ptr15))
+guard_false(i16, descr=<Guard0x1954f50>) [p14, p1, p13]
++257: p17 = getfield_gc(p14, descr=<FieldP execution_model.W_List.inst_car 8>)
++260: guard_nonnull_class(p17, 18811908, descr=<Guard0x1954f10>) [p14, p1, p17, p13]
++278: p19 = getfield_gc(p17, descr=<FieldP execution_model.W_List.inst_car 8>)
++281: guard_nonnull_class(p19, 18811956, descr=<Guard0x1954ed0>) [p14, p1, p17, p19, p13]
++299: p22 = call(ConstClass(W_Frame._get_pure), p1, p19, p9, descr=<Callr 4 rrr EF=3>)
++385: guard_no_exception(descr=<Guard0x1954e90>) [p14, p1, p17, p22, p19, p13]
++398: guard_nonnull(p22, descr=<Guard0x1954e50>) [p14, p1, p17, p22, p19, p13]
++406: p23 = getfield_gc(p22, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++409: p24 = getfield_gc(p23, descr=<FieldP execution_model.W_List.inst_car 8>)
++412: p25 = getfield_gc(p17, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++421: guard_value(p24, ConstPtr(ptr26), descr=<Guard0x1954e10>) [p14, p1, p25, p24, p13]
+debug_merge_point(1, 1, '#<primitive m_eval>')
+p27 = call_assembler(p25, p1, descr=<Loop0>)
+guard_not_forced(descr=<Guard0x1954dd0>) [p14, p1, p27, p13]
++638: guard_no_exception(descr=<Guard0x1954d90>) [p14, p1, p27, p13]
++651: guard_no_exception(descr=<Guard0x1954d50>) [p27, p14, p1, p13]
++664: p28 = getfield_gc(p14, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++673: i30 = instance_ptr_eq(p28, ConstPtr(ptr29))
+guard_false(i30, descr=<Guard0x1954d10>) [p28, p1, p27, p13]
++685: p31 = getfield_gc(p28, descr=<FieldP execution_model.W_List.inst_car 8>)
++688: guard_nonnull_class(p31, 18811908, descr=<Guard0x1954cd0>) [p28, p1, p31, p27, p13]
++706: p33 = getfield_gc(p31, descr=<FieldP execution_model.W_List.inst_car 8>)
++709: guard_nonnull_class(p33, 18811956, descr=<Guard0x1954c90>) [p28, p1, p31, p33, p27, p13]
++727: p35 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++736: p37 = call(ConstClass(W_Frame._get_pure), p1, p33, p35, descr=<Callr 4 rrr EF=3>)
++810: guard_no_exception(descr=<Guard0x1954c50>) [p28, p1, p31, p37, p33, p27, p13]
++823: guard_nonnull(p37, descr=<Guard0x1954c10>) [p28, p1, p31, p37, p33, p27, p13]
++831: p38 = getfield_gc(p37, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++834: p39 = getfield_gc(p38, descr=<FieldP execution_model.W_List.inst_car 8>)
++837: p40 = getfield_gc(p31, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++846: guard_value(p39, ConstPtr(ptr41), descr=<Guard0x1954bd0>) [p28, p1, p40, p39, p27, p13]
+debug_merge_point(1, 2, '#<primitive operate>')
+p42 = call_assembler(p40, p1, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x1954b90>) [p28, p1, p42, p27, p13]
++1063: guard_no_exception(descr=<Guard0x1954b50>) [p28, p1, p42, p27, p13]
++1076: guard_no_exception(descr=<Guard0x1954b10>) [p42, p28, p1, p27, p13]
++1089: p43 = getfield_gc(p28, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++1098: i45 = instance_ptr_eq(p43, ConstPtr(ptr44))
+guard_true(i45, descr=<Guard0x1954ad0>) [p43, p1, p42, p27, p13]
++1110: guard_value(p27, ConstPtr(ptr46), descr=<Guard0x1954a90>) [p42, p27, p13, None, None, None]
+debug_merge_point(1, 3, '#<fexpr #anyonymous>')
+p48 = call_assembler(p42, p13, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x1954a50>) [p48, None, None, None]
++1343: guard_no_exception(descr=<Guard0x1954a10>) [p48, None, None, None]
++1356: finish(p48, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++1402: --end of the loop--
+[145dc3ef1e0] jit-log-opt-loop}
+[145dc4000a2] {jit-log-opt-bridge
+# bridge out of Guard 0x1430f10 with 28 ops
+[p0, p1, p2, p3, p4]
++29: guard_value(p3, ConstPtr(ptr5), descr=<Guard0x195d190>) [p0, p1, p2, p3, p4]
+debug_merge_point(1, 1, '#<primitive m_bool>')
+p6 = call_assembler(p2, p1, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x195d4d0>) [p0, p1, p6, p4]
++246: guard_no_exception(descr=<Guard0x195d490>) [p0, p1, p6, p4]
++259: guard_no_exception(descr=<Guard0x195d450>) [p6, p0, p1, p4]
++272: p7 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++281: i9 = instance_ptr_eq(p7, ConstPtr(ptr8))
+guard_true(i9, descr=<Guard0x195d410>) [p7, p1, p6, p4]
++293: i11 = instance_ptr_eq(p4, ConstPtr(ptr10))
+guard_false(i11, descr=<Guard0x195d3d0>) [p6, p4, None, None]
++309: guard_nonnull_class(p6, 18811908, descr=<Guard0x195d390>) [p6, p4, None, None]
++327: p14 = getfield_gc(p6, descr=<FieldP execution_model.W_List.inst_car 8>)
++330: guard_nonnull_class(p14, 18811956, descr=<Guard0x195d350>) [p6, p4, p14, None, None]
++348: guard_nonnull_class(p4, 18811860, descr=<Guard0x195d310>) [p6, p4, p14, None, None]
++372: p17 = getfield_gc(p4, descr=<FieldP frame.W_Frame.inst__version 36>)
++375: p19 = call(ConstClass(W_Frame._get_pure), p4, p14, p17, descr=<Callr 4 rrr EF=3>)
++437: guard_no_exception(descr=<Guard0x195d2d0>) [p6, p4, p19, p14, None, None]
++450: guard_nonnull(p19, descr=<Guard0x195d290>) [p6, p4, p19, p14, None, None]
++458: p20 = getfield_gc(p19, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++461: p21 = getfield_gc(p20, descr=<FieldP execution_model.W_List.inst_car 8>)
++464: p22 = getfield_gc(p6, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++473: guard_value(p21, ConstPtr(ptr23), descr=<Guard0x195d250>) [p22, p21, p4, None, None]
+debug_merge_point(1, 2, '#<primitive cons>')
+p24 = call_assembler(p22, p4, descr=<Loop1>)
+guard_not_forced(descr=<Guard0x195d210>) [p24, None, None]
++690: guard_no_exception(descr=<Guard0x195d1d0>) [p24, None, None]
++703: finish(p24, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++749: --end of the loop--
+[145dc4002f7] jit-log-opt-bridge}
+[145dc403a86] {jit-log-opt-bridge
+# bridge out of Guard 0x195d190 with 28 ops
+[p0, p1, p2, p3, p4]
++29: guard_value(p3, ConstPtr(ptr5), descr=<Guard0x19fead0>) [p0, p1, p2, p3, p4]
+debug_merge_point(1, 1, '#<primitive car>')
+p6 = call_assembler(p2, p1, descr=<Loop4>)
+guard_not_forced(descr=<Guard0x1a0a510>) [p0, p1, p6, p4]
++246: guard_no_exception(descr=<Guard0x1a0a4d0>) [p0, p1, p6, p4]
++259: guard_no_exception(descr=<Guard0x1a0a490>) [p6, p0, p1, p4]
++272: p7 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++281: i9 = instance_ptr_eq(p7, ConstPtr(ptr8))
+guard_true(i9, descr=<Guard0x1a0a450>) [p7, p1, p6, p4]
++293: i11 = instance_ptr_eq(p4, ConstPtr(ptr10))
+guard_false(i11, descr=<Guard0x1a0a410>) [p6, p4, None, None]
++309: guard_nonnull_class(p6, 18811908, descr=<Guard0x1a0a3d0>) [p6, p4, None, None]
++327: p14 = getfield_gc(p6, descr=<FieldP execution_model.W_List.inst_car 8>)
++330: guard_nonnull_class(p14, 18811956, descr=<Guard0x1a0a390>) [p6, p4, p14, None, None]
++348: guard_nonnull_class(p4, 18811860, descr=<Guard0x1a0a350>) [p6, p4, p14, None, None]
++372: p17 = getfield_gc(p4, descr=<FieldP frame.W_Frame.inst__version 36>)
++375: p19 = call(ConstClass(W_Frame._get_pure), p4, p14, p17, descr=<Callr 4 rrr EF=3>)
++437: guard_no_exception(descr=<Guard0x1a0a310>) [p6, p4, p19, p14, None, None]
++450: guard_nonnull(p19, descr=<Guard0x1a0a2d0>) [p6, p4, p19, p14, None, None]
++458: p20 = getfield_gc(p19, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++461: p21 = getfield_gc(p20, descr=<FieldP execution_model.W_List.inst_car 8>)
++464: p22 = getfield_gc(p6, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++473: guard_value(p21, ConstPtr(ptr23), descr=<Guard0x1a0a290>) [p22, p21, p4, None, None]
+debug_merge_point(1, 2, '#<fexpr #anyonymous>')
+p24 = call_assembler(p22, p4, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x1a0a250>) [p24, None, None]
++690: guard_no_exception(descr=<Guard0x1a0a210>) [p24, None, None]
++703: finish(p24, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++749: --end of the loop--
+[145dc403bfb] jit-log-opt-bridge}
+[145dc4050fc] {jit-log-opt-bridge
+# bridge out of Guard 0x1954f10 with 31 ops
+[p0, p1, p2, p3]
++29: guard_nonnull_class(p2, 18811956, descr=<Guard0x1a0a550>) [p0, p1, p2, p3]
++47: i6 = instance_ptr_eq(p1, ConstPtr(ptr5))
+guard_false(i6, descr=<Guard0x1a17090>) [p0, p1, p2, p3]
++63: guard_nonnull_class(p1, 18811860, descr=<Guard0x1a17050>) [p0, p1, p2, p3]
++87: p8 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++90: p10 = call(ConstClass(W_Frame._get_pure), p1, p2, p8, descr=<Callr 4 rrr EF=3>)
++164: guard_no_exception(descr=<Guard0x1a17010>) [p0, p1, p10, p2, p3]
++177: guard_nonnull(p10, descr=<Guard0x1a0af90>) [p0, p1, p10, p2, p3]
++185: p11 = getfield_gc(p10, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++188: p12 = getfield_gc(p11, descr=<FieldP execution_model.W_List.inst_car 8>)
++191: guard_no_exception(descr=<Guard0x1a0af50>) [p12, p0, p1, p3]
++204: p13 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++213: i15 = instance_ptr_eq(p13, ConstPtr(ptr14))
+guard_false(i15, descr=<Guard0x1a0af10>) [p13, p1, p12, p3]
++225: p16 = getfield_gc(p13, descr=<FieldP execution_model.W_List.inst_car 8>)
++228: guard_nonnull_class(p16, 18811956, descr=<Guard0x1a0aed0>) [p13, p1, p16, p12, p3]
++246: p19 = call(ConstClass(W_Frame._get_pure), p1, p16, p8, descr=<Callr 4 rrr EF=3>)
++326: guard_no_exception(descr=<Guard0x1a0ae90>) [p13, p1, p19, p16, p12, p3]
++339: guard_nonnull(p19, descr=<Guard0x1a0ae50>) [p13, p1, p19, p16, p12, p3]
++347: p20 = getfield_gc(p19, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++350: p21 = getfield_gc(p20, descr=<FieldP execution_model.W_List.inst_car 8>)
++353: guard_no_exception(descr=<Guard0x1a0ae10>) [p21, p13, p1, p12, p3]
++366: p22 = getfield_gc(p13, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++375: i24 = instance_ptr_eq(p22, ConstPtr(ptr23))
+guard_true(i24, descr=<Guard0x1a0add0>) [p22, p1, p21, p12, p3]
++387: guard_value(p12, ConstPtr(ptr25), descr=<Guard0x1a0ad90>) [p21, p12, p3, None, None, None]
+debug_merge_point(1, 1, '#<fexpr #anyonymous>')
+p27 = call_assembler(p21, p3, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x1a0ad50>) [p27, None, None, None]
++620: guard_no_exception(descr=<Guard0x1a0ad10>) [p27, None, None, None]
++633: finish(p27, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++679: --end of the loop--
+[145dc405402] jit-log-opt-bridge}
+[145dc4086b0] {jit-log-opt-bridge
+# bridge out of Guard 0x1a0a3d0 with 11 ops
+[p0, p1]
++29: guard_nonnull_class(p0, 18811956, descr=<Guard0x1a170d0>) [p0, p1]
++47: i4 = instance_ptr_eq(p1, ConstPtr(ptr3))
+guard_false(i4, descr=<Guard0x1a17410>) [p1, p0]
++63: guard_nonnull_class(p1, 18811860, descr=<Guard0x1a173d0>) [p1, p0]
++87: p6 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++90: p8 = call(ConstClass(W_Frame._get_pure), p1, p0, p6, descr=<Callr 4 rrr EF=3>)
++146: guard_no_exception(descr=<Guard0x1a17390>) [p8, p0]
++159: guard_nonnull(p8, descr=<Guard0x1a17350>) [p8, p0]
++167: p9 = getfield_gc(p8, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++170: p10 = getfield_gc(p9, descr=<FieldP execution_model.W_List.inst_car 8>)
++173: finish(p10, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++219: --end of the loop--
+[145dc40875f] jit-log-opt-bridge}
+[145dc40a58e] {jit-log-opt-bridge
+# bridge out of Guard 0x195d250 with 6 ops
+[p0, p1, p2]
++29: guard_value(p1, ConstPtr(ptr3), descr=<Guard0x1a17450>) [p0, p1, p2]
+debug_merge_point(1, 1, '#<fexpr #anyonymous>')
+p4 = call_assembler(p0, p2, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x1a17590>) [p4]
++246: guard_no_exception(descr=<Guard0x1a17550>) [p4]
++259: finish(p4, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++305: --end of the loop--
+[145dc40a60e] jit-log-opt-bridge}
+[145dc4115d6] {jit-log-opt-bridge
+# bridge out of Guard 0x19fead0 with 20 ops
+[p0, p1, p2, p3, p4]
++29: guard_value(p3, ConstPtr(ptr5), descr=<Guard0x1a175d0>) [p0, p1, p2, p3, p4]
+debug_merge_point(1, 1, '#<fexpr #anyonymous>')
+p6 = call_assembler(p2, p1, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x1a17d50>) [p0, p1, p6, p4]
++246: guard_no_exception(descr=<Guard0x1a17d10>) [p0, p1, p6, p4]
++259: guard_no_exception(descr=<Guard0x1a17cd0>) [p6, p0, p1, p4]
++272: p7 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++281: i9 = instance_ptr_eq(p7, ConstPtr(ptr8))
+guard_true(i9, descr=<Guard0x1a17c90>) [p7, p1, p6, p4]
++293: i11 = instance_ptr_eq(p4, ConstPtr(ptr10))
+guard_false(i11, descr=<Guard0x1a17c50>) [p6, p4, None, None]
++309: guard_nonnull_class(p6, 18811908, descr=<Guard0x1a17c10>) [p6, p4, None, None]
++327: p14 = getfield_gc(p6, descr=<FieldP execution_model.W_List.inst_car 8>)
++330: guard_value(p14, ConstPtr(ptr15), descr=<Guard0x1a17bd0>) [p6, p4, p14, None, None]
++342: p16 = getfield_gc(p6, descr=<FieldP execution_model.W_List.inst_cdr 12>)
+debug_merge_point(1, 2, '#<vau>')
+p17 = call_assembler(p16, p4, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x1a17b90>) [p17, None, None]
++562: guard_no_exception(descr=<Guard0x1a17b50>) [p17, None, None]
++575: finish(p17, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++621: --end of the loop--
+[145dc4117b4] jit-log-opt-bridge}
+[145dc412c6e] {jit-log-opt-bridge
+# bridge out of Guard 0x14ffd90 with 32 ops
+[p0, p1, p2]
++29: guard_nonnull_class(p2, 18811908, descr=<Guard0x1a17d90>) [p0, p1, p2]
++47: p4 = getfield_gc(p2, descr=<FieldP execution_model.W_List.inst_car 8>)
++50: i6 = instance_ptr_eq(p1, ConstPtr(ptr5))
+guard_false(i6, descr=<Guard0x1ad2650>) [p0, p1, p2, p4]
++66: guard_nonnull_class(p4, 18811956, descr=<Guard0x1ad2610>) [p0, p1, p2, p4]
++84: guard_nonnull_class(p1, 18811860, descr=<Guard0x1ad25d0>) [p0, p1, p2, p4]
++108: p9 = getfield_gc(p1, descr=<FieldP frame.W_Frame.inst__version 36>)
++111: p11 = call(ConstClass(W_Frame._get_pure), p1, p4, p9, descr=<Callr 4 rrr EF=3>)
++179: guard_no_exception(descr=<Guard0x1ad2590>) [p0, p1, p2, p11, p4]
++192: guard_nonnull(p11, descr=<Guard0x1ad2550>) [p0, p1, p2, p11, p4]
++200: p12 = getfield_gc(p11, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++203: p13 = getfield_gc(p12, descr=<FieldP execution_model.W_List.inst_car 8>)
++206: p14 = getfield_gc(p2, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++215: guard_value(p13, ConstPtr(ptr15), descr=<Guard0x1ad2510>) [p0, p1, p14, p13]
+debug_merge_point(1, 1, '#<primitive cdr>')
+p16 = call_assembler(p14, p1, descr=<Loop5>)
+guard_not_forced(descr=<Guard0x1ad24d0>) [p0, p1, p16]
++432: guard_no_exception(descr=<Guard0x1ad2490>) [p0, p1, p16]
+p17 = new(descr=<SizeDescr 12>)
+p19 = new_array(0, descr=<ArrayP 4>)
++508: setfield_gc(p17, p19, descr=<FieldP list.items 8>)
++511: call(ConstClass(_ll_list_resize_hint_really_look_inside_iff__listPtr_Signed_Bool), p17, 1, 1, descr=<Callv 0 rii EF=4>)
++575: guard_no_exception(descr=<Guard0x1ad2450>) [p17, p16, p0, p1]
++588: p23 = getfield_gc(p17, descr=<FieldP list.items 8>)
++597: p24 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++606: setfield_gc(p17, 1, descr=<FieldS list.length 4>)
++633: setarrayitem_gc(p23, 0, p16, descr=<ArrayP 4>)
++642: i27 = instance_ptr_eq(p24, ConstPtr(ptr26))
+guard_true(i27, descr=<Guard0x1ad2410>) [p17, p24, p1]
++654: i29 = instance_ptr_eq(p16, ConstPtr(ptr28))
+guard_true(i29, descr=<Guard0x1ad23d0>) []
++666: finish(ConstPtr(ptr30), descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++716: --end of the loop--
+[145dc412df9] jit-log-opt-bridge}
+[145dc415a5a] {jit-log-opt-loop
+# Loop 7 (#<vau>) : entry bridge with 12 ops
+[p0, p1]
+debug_merge_point(0, 0, '#<vau>')
++61: p2 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_car 8>)
++70: p3 = getfield_gc(p0, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++73: p4 = getfield_gc(p3, descr=<FieldP execution_model.W_List.inst_car 8>)
++76: p5 = getfield_gc(p3, descr=<FieldP execution_model.W_List.inst_cdr 12>)
++79: p6 = getfield_gc(p5, descr=<FieldP execution_model.W_List.inst_car 8>)
+p8 = new_with_vtable(18819332)
++136: setfield_gc(p8, p6, descr=<FieldP execution_model.W_Fexpr.inst_body 8>)
++139: setfield_gc(p8, p1, descr=<FieldP execution_model.W_Fexpr.inst_static_env 24>)
++148: setfield_gc(p8, p2, descr=<FieldP execution_model.W_Fexpr.inst_params 20>)
++157: setfield_gc(p8, p4, descr=<FieldP execution_model.W_Fexpr.inst_env_param 12>)
++160: finish(p8, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++206: --end of the loop--
+[145dc415be4] jit-log-opt-loop}
+[145dc429095] {jit-log-opt-bridge
+# bridge out of Guard 0x18188d0 with 6 ops
+[p0, p1, p2]
++29: guard_value(p1, ConstPtr(ptr3), descr=<Guard0x1ad2010>) [p0, p1, p2]
+debug_merge_point(1, 1, '#<primitive less_or_eq>')
+p4 = call_assembler(p0, p2, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x1ad2150>) [p4]
++246: guard_no_exception(descr=<Guard0x1ad2110>) [p4]
++259: finish(p4, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++305: --end of the loop--
+[145dc429130] jit-log-opt-bridge}
+[145dc42ef68] {jit-log-opt-bridge
+# bridge out of Guard 0x1a0a290 with 6 ops
+[p0, p1, p2]
++29: guard_value(p1, ConstPtr(ptr3), descr=<Guard0x1ad21d0>) [p0, p1, p2]
+debug_merge_point(1, 1, '#<fexpr #anyonymous>')
+p4 = call_assembler(p0, p2, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x1ad2250>) [p4]
++246: guard_no_exception(descr=<Guard0x1ad2210>) [p4]
++259: finish(p4, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++305: --end of the loop--
+[145dc42efe4] jit-log-opt-bridge}
+[145dc433f42] {jit-log-opt-bridge
+# bridge out of Guard 0x1a17450 with 6 ops
+[p0, p1, p2]
++29: guard_value(p1, ConstPtr(ptr3), descr=<Guard0x1ad2310>) [p0, p1, p2]
+debug_merge_point(1, 1, '#<primitive car>')
+p4 = call_assembler(p0, p2, descr=<Loop4>)
+guard_not_forced(descr=<Guard0x1ad2e10>) [p4]
++246: guard_no_exception(descr=<Guard0x1ad2dd0>) [p4]
++259: finish(p4, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++305: --end of the loop--
+[145dc433fc6] jit-log-opt-bridge}
+[145dc45401c] {jit-log-opt-bridge
+# bridge out of Guard 0x1ad21d0 with 6 ops
+[p0, p1, p2]
++29: guard_value(p1, ConstPtr(ptr3), descr=<Guard0x145b490>) [p0, p1, p2]
+debug_merge_point(1, 1, '#<primitive plus>')
+p4 = call_assembler(p0, p2, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x145b5d0>) [p4]
++246: guard_no_exception(descr=<Guard0x145b590>) [p4]
++259: finish(p4, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++305: --end of the loop--
+[145dc45409b] jit-log-opt-bridge}
+[145dc455f36] {jit-log-opt-bridge
+# bridge out of Guard 0x1ad2310 with 6 ops
+[p0, p1, p2]
++29: guard_value(p1, ConstPtr(ptr3), descr=<Guard0x145b650>) [p0, p1, p2]
+debug_merge_point(1, 1, '#<fexpr #anyonymous>')
+p4 = call_assembler(p0, p2, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x145b6d0>) [p4]
++246: guard_no_exception(descr=<Guard0x145b690>) [p4]
++259: finish(p4, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++305: --end of the loop--
+[145dc455fae] jit-log-opt-bridge}
+[145dc46b0c1] {jit-log-opt-bridge
+# bridge out of Guard 0x145b490 with 6 ops
+[p0, p1, p2]
++29: guard_value(p1, ConstPtr(ptr3), descr=<Guard0x14f4690>) [p0, p1, p2]
+debug_merge_point(1, 1, '#<primitive minus>')
+p4 = call_assembler(p0, p2, descr=<Loop-1>)
+guard_not_forced(descr=<Guard0x14f47d0>) [p4]
++246: guard_no_exception(descr=<Guard0x14f4790>) [p4]
++259: finish(p4, descr=<DoneWithThisFrameDescrRef object at 0x1201a7c>)
++305: --end of the loop--
+[145dc46b122] jit-log-opt-bridge}
