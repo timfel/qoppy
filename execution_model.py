@@ -56,6 +56,8 @@ class W_False(W_Object):
 w_false = W_False()
 
 class W_String(W_Object):
+    _immutable_fields_ = ["strval"]
+
     def __init__(self, val):
         self.strval = val
 
@@ -82,6 +84,7 @@ class W_String(W_Object):
         return self.strval == w_obj.strval
 
 class W_Symbol(W_Object):
+    _immutable_fields_ = ["val"]
     #class dictionary for symbol storage
     obarray = {}
 
@@ -107,6 +110,8 @@ def symbol(name):
     return w_symb
 
 class W_Real(W_Object):
+    _immutable_fields_ = ["exact", "realval"]
+
     def __init__(self, val):
         self.exact = False
         self.realval = val
@@ -153,6 +158,8 @@ class W_Real(W_Object):
 W_Number = W_Real
 
 class W_Integer(W_Real):
+    _immutable_fields_ = ["exact", "realval", "intval"]
+
     def __init__(self, val):
         self.intval = val
         self.realval = val
@@ -199,6 +206,8 @@ class W_Stream(W_Object):
             return w_eof
 
 class W_List(W_Object):
+    _immutable_fields_ = ["car?", "cdr?"]
+
     def __init__(self, car, cdr):
         self.car = car
         self.cdr = cdr
@@ -283,6 +292,8 @@ class W_Nil(W_List):
 w_nil = W_Nil()
 
 class W_Fexpr(W_Object):
+    _immutable_fields_ = ["env_param", "params", "static_env", "body"]
+
     def __init__(self, env_param, params, static_env, body):
         self.name = None
         self.env_param = env_param
@@ -302,6 +313,8 @@ class W_Fexpr(W_Object):
         return runtime.m_eval(local_env, self.body)
 
 class W_Primitive(W_Fexpr):
+    _immutable_fields_ = ["fun"]
+
     @specialize.memo()
     def __init__(self, fun):
         code = fun.__code__
