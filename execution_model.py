@@ -347,11 +347,17 @@ class W_Primitive(W_Fexpr):
 
     def call(self, runtime, env, operands):
         operands_w = []
-        while operands is not w_nil:
-            assert isinstance(operands, W_List)
-            operands_w.append(runtime.m_eval(env, operands.car))
-            operands = operands.cdr
+        if operands is not w_nil:
+            self._evaluate_operands(runtime, env, operands, operands_w)
         return self.fun(operands_w)
+
+    def _evaluate_operands(self, runtime, env, operands, operands_w):
+        if operands is w_nil:
+            return
+        assert isinstance(operands, W_List)
+        operands_w.append(runtime.m_eval(env, operands.car))
+        self._evaluate_operands(runtime, env, operands.cdr, operands_w)
+
 
 class W_Vau(W_Primitive):
     def call(self, runtime, env, operands):
