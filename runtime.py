@@ -3,6 +3,7 @@ from rpython.rlib.objectmodel import specialize
 
 from execution_model import (W_List, symbol, w_nil, W_Symbol, QuoppaException,
                              W_Vau, W_Primitive, W_Fexpr, w_list)
+from frame import W_Frame
 
 
 def get_printable_location(self, exp):
@@ -19,14 +20,24 @@ class Runtime(object):
     @specialize.memo()
     def __init__(self, primitives):
         vau = W_Vau(self.vau)
-        global_frame = self.bind(symbol("vau"), vau)
+
+        global_env = self.bind(symbol("vau"), vau)
+        global_frame = W_Frame(w_list(global_env), None)
+        global_frame.set(symbol("vau"), vau)
+
         primitives["eval"] = self.m_eval
         primitives["operate"] = self.operate
         primitives["lookup"] = self.lookup
         for name in primitives:
             prim = W_Primitive(primitives[name])
-            global_frame.comma(w_list(w_list(symbol(name), prim)))
-        self.global_env = w_list(global_frame)
+            global_env.comma(w_list(w_list(symbol(name), prim)))
+            global_frame.set(symbol(name), prim)
+
+        # XXX
+        global_frame.car = global_env.car
+        global_frame.cdr = global_env.cdr
+
+        self.global_env = global_frame
 
     def bind(self, param, val):
         if param is w_nil and val is w_nil:
@@ -51,6 +62,16 @@ class Runtime(object):
     def lookup(self, name, env):
         if env is w_nil or not isinstance(env, W_List):
             raise QuoppaException("cannot find %s in %s" % (name.to_string(), env.to_string()))
+        w_res = None
+        if isinstance(env, W_Frame):
+            w_res = env.get(name)
+        else:
+            w_res = self._slow_lookup(name, env)
+        if not w_res:
+            raise QuoppaException("cannot find %s in env" % name.to_string())
+        return w_res
+
+    def _slow_lookup(self, name, env):
         while env is not w_nil:
             frame = env.car
             while frame is not w_nil:
@@ -65,8 +86,8 @@ class Runtime(object):
             env = env.cdr
             if not isinstance(env, W_List):
                     raise QuoppaException("Consistency! Non cons %s as env cdr" % env.to_string())
-        raise QuoppaException("cannot find %s in env" % name.to_string())
 
+    @specialize.argtype(2)
     def m_eval(self, env, exp):
         if env is w_nil:
             env = self.global_env
@@ -98,3 +119,26 @@ class Runtime(object):
         body = body_cdr.car
 
         return W_Fexpr(env_param, params, static_env, body)
+
+    def create_frame(self, local_names, local_values, static_env=None, local_env=None, frame=None):
+        if not frame:
+            frame = W_Frame(local_env, static_env)
+
+        if local_names is w_nil and local_values is w_nil:
+            return frame
+        elif isinstance(local_names, W_Symbol):
+            if local_names.name != "_":
+                # For debugging
+                if isinstance(local_values, W_Fexpr) and not local_values.name:
+                    local_values.name = local_names.name
+                frame.set(local_names, local_values)
+            return frame
+        elif local_names is w_nil:
+            raise QuoppaException("too many arguments")
+        elif local_values is w_nil:
+            raise QuoppaException("too few arguments")
+        elif isinstance(local_names, W_List) and isinstance(local_values, W_List):
+            frame = self.create_frame(local_names.car, local_values.car, frame=frame)
+            return self.create_frame(local_names.cdr, local_values.cdr, frame=frame)
+        else:
+            raise QuoppaException("can't bind %s %s" % (local_names.to_string(), local_values.to_string()))

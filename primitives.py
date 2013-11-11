@@ -4,6 +4,8 @@ from parser import parse
 from execution_model import (w_nil, w_true, w_false, w_eof, W_Real,
                              W_Symbol, W_String, W_List, QuoppaException,
                              W_Stream)
+from frame import W_RootFrameEntry, W_Frame
+
 
 def m_bool(b, t, f):
     if b.to_boolean():
@@ -45,20 +47,28 @@ def car(w_pair):
         raise QuoppaException("wrong type argument %s for car" % w_pair.to_string())
 
 def cdr(w_pair):
-    if isinstance(w_pair, W_List) and w_pair is not w_nil:
+    if isinstance(w_pair, W_Frame):
+        raise QuoppaException("frame traversal not implemented using car/cdr. Use lookup")
+    elif isinstance(w_pair, W_List) and w_pair is not w_nil:
         return w_pair.cdr
     else:
         raise QuoppaException("wrong type argument %s for cdr" % w_pair.to_string())
 
 def set_car_b(w_pair, w_val):
-    if isinstance(w_pair, W_List) and w_pair is not w_nil:
+    if isinstance(w_pair, W_RootFrameEntry):
+        w_pair.set_car_b(w_val)
+        return w_pair
+    elif isinstance(w_pair, W_List) and w_pair is not w_nil:
         w_pair.car = w_val
         return w_pair
     else:
         raise QuoppaException("wrong type argument %s for set-car!" % w_pair.to_string())
 
 def set_cdr_b(w_pair, w_val):
-    if isinstance(w_pair, W_List) and w_pair is not w_nil:
+    if isinstance(w_pair, W_RootFrameEntry):
+        w_pair.set_cdr_b(w_val)
+        return w_pair
+    elif isinstance(w_pair, W_List) and w_pair is not w_nil:
         w_pair.cdr = w_val
         return w_pair
     else:
