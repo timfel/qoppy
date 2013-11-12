@@ -22,7 +22,7 @@ class Runtime(object):
         vau = W_Vau(self.vau)
 
         global_env = self.bind(symbol("vau"), vau)
-        global_frame = W_Frame(w_list(global_env), None)
+        global_frame = W_Frame(None)
         global_frame.set(symbol("vau"), vau)
 
         primitives["eval"] = self.m_eval
@@ -120,25 +120,31 @@ class Runtime(object):
 
         return W_Fexpr(env_param, params, static_env, body)
 
-    def create_frame(self, local_names, local_values, static_env=None, local_env=None, frame=None):
-        if not frame:
-            frame = W_Frame(local_env, static_env)
+    @jit.unroll_safe
+    def create_frame(self, local_names, local_values, static_env):
+        frame = W_Frame(static_env)
 
         if local_names is w_nil and local_values is w_nil:
             return frame
-        elif isinstance(local_names, W_Symbol):
-            if local_names.name != "_":
-                # For debugging
-                if isinstance(local_values, W_Fexpr) and not local_values.name:
-                    local_values.name = local_names.name
-                frame.set(local_names, local_values)
-            return frame
-        elif local_names is w_nil:
-            raise QuoppaException("too many arguments")
-        elif local_values is w_nil:
-            raise QuoppaException("too few arguments")
-        elif isinstance(local_names, W_List) and isinstance(local_values, W_List):
-            frame = self.create_frame(local_names.car, local_values.car, frame=frame)
-            return self.create_frame(local_names.cdr, local_values.cdr, frame=frame)
-        else:
+        elif not isinstance(local_names, W_List) or not isinstance(local_values, W_List):
             raise QuoppaException("can't bind %s %s" % (local_names.to_string(), local_values.to_string()))
+
+        while local_names is not w_nil:
+            if isinstance(local_names, W_List):
+                if local_values is w_nil:
+                    raise QuoppaException("too few arguments")
+                name = local_names.car
+                value = local_values.car
+                local_names = local_names.cdr
+                local_values = local_values.cdr
+                assert isinstance(local_values, W_List)
+            else: # Splat-arg
+                name = local_names
+                value = local_values
+                local_values = w_nil
+                local_names = w_nil
+            frame.set(name, value)
+
+        if local_values is not w_nil:
+            raise QuoppaException("too many arguments")
+        return frame

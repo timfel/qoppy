@@ -310,11 +310,11 @@ class W_Fexpr(W_Object):
         from frame import W_Frame
         local_names = W_List(self.env_param, self.params)
         local_values = W_List(dynamic_env, operands)
-        local_env = W_List(runtime.bind(local_names, local_values), self.static_env)
         if isinstance(self.static_env, W_Frame) and isinstance(dynamic_env, W_Frame):
-            frame = runtime.create_frame(local_names, local_values, local_env=local_env, static_env=self.static_env)
+            frame = runtime.create_frame(local_names, local_values, self.static_env)
             return runtime.m_eval(frame, self.body)
         else:
+            local_env = W_List(runtime.bind(local_names, local_values), self.static_env)
             return runtime.m_eval(local_env, self.body)
 
 class W_Primitive(W_Fexpr):

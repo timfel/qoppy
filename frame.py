@@ -1,11 +1,7 @@
 from rpython.rlib import jit
 from rpython.rlib.objectmodel import we_are_translated
 
-from execution_model import W_Object, W_List, w_nil, W_Symbol, QuoppaException
-
-
-class VersionTag(object):
-    pass
+from execution_model import W_Object, W_List, w_nil, W_Symbol, QuoppaException, W_Fexpr
 
 
 def frame_write_exception():
@@ -57,11 +53,9 @@ class W_FrameEntry(W_RootFrameEntry):
 class W_Frame(W_RootFrameEntry):
     _immutable_fields_ = ["_dict", "_static_env"]
 
-    def __init__(self, local_env, static_env):
+    def __init__(self, static_env):
         self._dict = {}
         self._static_env = static_env
-        self._version = VersionTag()
-        self._local_env = local_env
         self.car = w_nil
         self.cdr = None
 
@@ -86,19 +80,17 @@ class W_Frame(W_RootFrameEntry):
         assert isinstance(param, W_Symbol)
         entry = W_FrameEntry(param, W_FrameValue(val, self))
         self._dict[param.name] = entry
+
+        # For debugging
+        if isinstance(val, W_Fexpr) and not val.name:
+            val.name = param.name
+
         if not self.car:
             self.car = entry
-        self.mutate()
 
-    def mutate(self):
-        self._version = VersionTag()
 
     def get(self, param):
         assert isinstance(param, W_Symbol)
-        return self._get_pure(param, self._version)
-
-    @jit.elidable
-    def _get_pure(self, param, version):
         w_res = self._dict.get(param.name, None)
         if not w_res and self._static_env:
             return self._static_env.get(param)
