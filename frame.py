@@ -55,6 +55,7 @@ class W_Frame(W_RootFrameEntry):
 
     def __init__(self, static_env):
         self._dict = {}
+        self._w_dict = {}
         self._static_env = static_env
         self.car = w_nil
         self.cdr = None
@@ -78,16 +79,22 @@ class W_Frame(W_RootFrameEntry):
 
     def set(self, param, val):
         assert isinstance(param, W_Symbol)
-        entry = W_FrameEntry(param, W_FrameValue(val, self))
-        self._dict[param.name] = entry
+        self._dict[param.name] = val
 
         # For debugging
         if isinstance(val, W_Fexpr) and not val.name:
             val.name = param.name
 
         if not self.car:
-            self.car = entry
+            self.car = self.wrap(param, val)
 
+    def wrap(self, param, val):
+        assert isinstance(param, W_Symbol)
+        entry = self._w_dict.get(param.name, None)
+        if not entry:
+            entry = W_FrameEntry(param, W_FrameValue(val, self))
+            self._w_dict[param.name] = entry
+        return entry
 
     def get(self, param):
         assert isinstance(param, W_Symbol)
@@ -96,6 +103,12 @@ class W_Frame(W_RootFrameEntry):
             return self._static_env.get(param)
         else:
             return w_res
+
+    def get_wrapped(self, param):
+        w_res = self.get(param)
+        if w_res:
+            w_res = self.wrap(param, w_res)
+        return w_res
 
     def to_string(self):
         if we_are_translated():
