@@ -195,7 +195,6 @@
       memo
       (fact_tr (- n 1) (+ n memo))))
 
-(display "(fact 200) = ")
 (display (fact 200))
 (display "\n... now running (fact 200) like a bronxozillion times")
 
